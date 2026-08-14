@@ -1,0 +1,159 @@
+"""
+Knowledge Graph + LLM Module (Placeholder)
+===========================================
+This module serves as the placeholder for the Knowledge Graph (KG) pipeline
+and LLM response generation stage.
+
+In production, replace the `query_medical_knowledge` function body with:
+  - KG retrieval (Neo4j, RDF, custom graph, etc.)
+  - Entity linking / NER
+  - Evidence retrieval
+  - LLM call with retrieved context (RAG pattern)
+
+Currently wired to GPT-4o-mini as a direct LLM fallback placeholder.
+"""
+
+import os
+import sys
+from typing import Optional
+
+# ---------------------------------------------------------------------------
+# Optional: real OpenAI call (requires OPENAI_API_KEY env var)
+# ---------------------------------------------------------------------------
+try:
+    from openai import OpenAI
+    _openai_available = True
+except ImportError:
+    _openai_available = False
+
+
+# ---------------------------------------------------------------------------
+# System prompt that would normally be augmented with KG context
+# ---------------------------------------------------------------------------
+SYSTEM_PROMPT = """You are MediAssist, a knowledgeable and compassionate medical AI assistant
+specialising in Non-Communicable Diseases (NCDs) and diet/nutrition.
+
+Your focus areas include:
+- Hypertension (high blood pressure)
+- Type 2 diabetes and blood sugar management
+- Cardiovascular diseases (heart disease, coronary artery disease, atherosclerosis)
+- Stroke prevention and recovery
+- Obesity and weight management
+- Chronic kidney disease related to NCDs
+- Diet and nutrition guidance for NCD prevention and management
+
+Guidelines:
+- Provide clear, evidence-based information relevant to NCDs and diet
+- Always recommend consulting a qualified healthcare professional for diagnosis or treatment
+- Be empathetic and use plain language — many users may be from low-resource settings
+- Do not diagnose; explain symptoms, conditions, lifestyle changes, and dietary guidance
+- If a question is outside NCD or diet scope, politely note your focus area but still help if you can
+- Keep answers concise but complete (2–4 paragraphs max)
+"""
+
+DISCLAIMER = (
+    "\n\n⚕️ *This information is for educational purposes only. "
+    "Please consult a qualified healthcare professional for medical advice, "
+    "diagnosis, or treatment.*"
+)
+
+
+# ---------------------------------------------------------------------------
+# KG retrieval placeholder
+# ---------------------------------------------------------------------------
+def retrieve_from_kg(query: str) -> Optional[str]:
+    """
+    PLACEHOLDER — Knowledge Graph Retrieval
+    ----------------------------------------
+    Replace with actual KG lookup logic:
+      - SPARQL query to a medical ontology (SNOMED CT, ICD-10, etc.)
+      - Neo4j Cypher query
+      - Vector similarity search on medical embeddings
+      - Custom graph traversal
+
+    Returns:
+        str | None: Retrieved context string to inject into LLM prompt,
+                    or None if nothing relevant found.
+    """
+    # TODO: implement KG retrieval
+    return None  # No KG context in placeholder mode
+
+
+# ---------------------------------------------------------------------------
+# LLM call (GPT-4o-mini placeholder)
+# ---------------------------------------------------------------------------
+def call_llm(question: str, kg_context: Optional[str] = None) -> str:
+  
+    user_message = question
+    if kg_context:
+        user_message = (
+            f"[Relevant Medical Knowledge]\n{kg_context}\n\n"
+            f"[Patient Question]\n{question}"
+        )
+
+    # ------------------------------------------------------------------
+    # Real OpenAI call
+    # ------------------------------------------------------------------
+    if _openai_available:
+        api_key = os.getenv("OPENAI_API_KEY")
+        print(api_key)
+        if api_key:
+            try:
+                client = OpenAI(api_key=api_key)
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_message},
+                    ],
+                    temperature=0.3,
+                    max_tokens=100,
+                )
+                answer = response.choices[0].message.content.strip()
+                return answer + DISCLAIMER
+            except Exception as e:
+                print(f"⚠️  OpenAI call failed: {e}", file=sys.stderr)
+
+    # ------------------------------------------------------------------
+    # Static placeholder fallback (no API key / openai not installed)
+    # ------------------------------------------------------------------
+    return (
+        f"[PLACEHOLDER RESPONSE]\n\n"
+        f"Thank you for your question: \"{question}\"\n\n"
+        f"In production, this response will be generated by GPT-4o-mini "
+        f"augmented with retrieved Knowledge Graph context from medical ontologies "
+        f"such as SNOMED CT, ICD-10, and curated clinical guidelines.\n\n"
+        f"The system will provide evidence-based, structured medical information "
+        f"tailored to your query."
+        + DISCLAIMER
+    )
+
+
+# ---------------------------------------------------------------------------
+# Main public interface
+# ---------------------------------------------------------------------------
+def query_medical_knowledge(question: str) -> dict:
+    """
+    Main entry point called by the FastAPI layer.
+
+    Args:
+        question (str): Medical question in English.
+
+    Returns:
+        dict: {
+            "answer": str,          # LLM / KG answer in English
+            "kg_used": bool,        # Whether KG context was used
+            "source": str           # Description of knowledge source used
+        }
+    """
+    # Step 1: Retrieve from Knowledge Graph
+    kg_context = retrieve_from_kg(question)
+
+    # Step 2: Generate answer via LLM (+ KG context if available)
+    answer = call_llm(question, kg_context)
+
+    return {
+        "answer": answer,
+        "kg_used": kg_context is not None,
+        "source": "KG + GPT-4o-mini" if kg_context else "GPT-4o-mini (placeholder)",
+    }
