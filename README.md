@@ -362,7 +362,7 @@ English-only, skips translation. Useful for backend testing.
 
 ## 8. Wiring in the Knowledge Graph
 
-Open `KG/knowledge_graph.py` and implement `retrieve_from_kg()`. This is the **only function you need to change** — everything else (translation, API routing, UI display) is already wired up.
+Modify `KG/knowledge_graph.py` and implement `retrieve_from_kg()`.
 
 **Contract:** return a plain string answer, or `None` if nothing found.
 
