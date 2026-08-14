@@ -17,7 +17,7 @@ export const LANGUAGES: Language[] = [
   },
   {
     code: "dav",
-    label: "Taita (Dawida)",
+    label: "Kidawida",
     flag: "🇰🇪",
     badge: "DAV",
     placeholder: "Uliza kuhusu magonjwa yasiyoambukiza…",

@@ -1,16 +1,11 @@
 """
-Knowledge Graph + LLM Module (Placeholder)
-===========================================
-This module serves as the placeholder for the Knowledge Graph (KG) pipeline
-and LLM response generation stage.
+Knowledge Graph + LLM Module
+==============================
+Pipeline priority:
+  1. retrieve_from_kg(query)  →  if it returns an answer, use it DIRECTLY — no LLM
+  2. call_llm(query)          →  temporary fallback ONLY when KG returns nothing
 
-In production, replace the `query_medical_knowledge` function body with:
-  - KG retrieval (Neo4j, RDF, custom graph, etc.)
-  - Entity linking / NER
-  - Evidence retrieval
-  - LLM call with retrieved context (RAG pattern)
-
-Currently wired to GPT-4o-mini as a direct LLM fallback placeholder.
+When your real KG is wired up, GPT is bypassed entirely.
 """
 
 import os
@@ -18,7 +13,7 @@ import sys
 from typing import Optional
 
 # ---------------------------------------------------------------------------
-# Optional: real OpenAI call (requires OPENAI_API_KEY env var)
+# Optional OpenAI — only used as a temporary fallback when KG has no answer
 # ---------------------------------------------------------------------------
 try:
     from openai import OpenAI
@@ -27,10 +22,8 @@ except ImportError:
     _openai_available = False
 
 
-# ---------------------------------------------------------------------------
-# System prompt that would normally be augmented with KG context
-# ---------------------------------------------------------------------------
-SYSTEM_PROMPT = """You are MediAssist, a knowledgeable and compassionate medical AI assistant
+# System prompt — only used by the GPT fallback, not the KG path
+_FALLBACK_SYSTEM_PROMPT = """You are MediAssist, a knowledgeable and compassionate medical AI assistant
 specialising in Non-Communicable Diseases (NCDs) and diet/nutrition.
 
 Your focus areas include:
@@ -45,9 +38,8 @@ Your focus areas include:
 Guidelines:
 - Provide clear, evidence-based information relevant to NCDs and diet
 - Always recommend consulting a qualified healthcare professional for diagnosis or treatment
-- Be empathetic and use plain language — many users may be from low-resource settings
+- Be empathetic and use plain language
 - Do not diagnose; explain symptoms, conditions, lifestyle changes, and dietary guidance
-- If a question is outside NCD or diet scope, politely note your focus area but still help if you can
 - Keep answers concise but complete (2–4 paragraphs max)
 """
 
@@ -58,102 +50,107 @@ DISCLAIMER = (
 )
 
 
-# ---------------------------------------------------------------------------
-# KG retrieval placeholder
-# ---------------------------------------------------------------------------
+# STEP 1 — Knowledge Graph retrieval
 def retrieve_from_kg(query: str) -> Optional[str]:
     """
-    PLACEHOLDER — Knowledge Graph Retrieval
-    ----------------------------------------
-    Replace with actual KG lookup logic:
-      - SPARQL query to a medical ontology (SNOMED CT, ICD-10, etc.)
-      - Neo4j Cypher query
-      - Vector similarity search on medical embeddings
-      - Custom graph traversal
+    Query the Knowledge Graph and return a complete answer string,
+    or None if no relevant answer is found.
+
+    This is the PRIMARY answer source. When this returns a value,
+    it is sent directly to the user — GPT is NOT called.
+
+    TODO: Replace the body of this function with your real KG logic:
+      - SPARQL query against SNOMED CT / ICD-10 / custom ontology
+      - Neo4j Cypher traversal
+      - Vector similarity search over medical embeddings
+      - Any structured retrieval that returns a human-readable answer
 
     Returns:
-        str | None: Retrieved context string to inject into LLM prompt,
-                    or None if nothing relevant found.
+        str  — complete answer to show the user  (GPT is skipped)
+        None — no answer found, fall through to GPT fallback
     """
-    # TODO: implement KG retrieval
-    return None  # No KG context in placeholder mode
+    # ----------------------------------------------------------------
+    # Example skeleton (uncomment and adapt when KG is ready):
+    #
+    # from your_kg_client import KGClient
+    # client = KGClient(os.getenv("KG_URI"))
+    # result = client.query(query)
+    # if result:
+    #     return result.format_answer()   # must return a plain string
+    # ----------------------------------------------------------------
+
+    return None   # ← KG not wired yet; falls through to GPT fallback
 
 
-# ---------------------------------------------------------------------------
-# LLM call (GPT-4o-mini placeholder)
-# ---------------------------------------------------------------------------
-def call_llm(question: str, kg_context: Optional[str] = None) -> str:
-  
-    user_message = question
-    if kg_context:
-        user_message = (
-            f"[Relevant Medical Knowledge]\n{kg_context}\n\n"
-            f"[Patient Question]\n{question}"
-        )
+# STEP 2 — GPT fallback (temporary, used ONLY when KG returns None)
 
-    # ------------------------------------------------------------------
-    # Real OpenAI call
-    # ------------------------------------------------------------------
+def _call_gpt_fallback(question: str) -> str:
+    """
+    Temporary GPT-4o-mini fallback.
+    Called ONLY when retrieve_from_kg() returns None.
+    Remove / disable this once the real KG is fully integrated.
+    """
     if _openai_available:
         api_key = os.getenv("OPENAI_API_KEY")
-        print(api_key)
         if api_key:
             try:
                 client = OpenAI(api_key=api_key)
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": user_message},
+                        {"role": "system", "content": _FALLBACK_SYSTEM_PROMPT},
+                        {"role": "user",   "content": question},
                     ],
                     temperature=0.3,
-                    max_tokens=100,
+                    max_tokens=600,
                 )
                 answer = response.choices[0].message.content.strip()
                 return answer + DISCLAIMER
             except Exception as e:
-                print(f"⚠️  OpenAI call failed: {e}", file=sys.stderr)
+                print(f"⚠️  GPT fallback failed: {e}", file=sys.stderr)
 
-    # ------------------------------------------------------------------
-    # Static placeholder fallback (no API key / openai not installed)
-    # ------------------------------------------------------------------
+    # No API key or openai not installed
     return (
-        f"[PLACEHOLDER RESPONSE]\n\n"
-        f"Thank you for your question: \"{question}\"\n\n"
-        f"In production, this response will be generated by GPT-4o-mini "
-        f"augmented with retrieved Knowledge Graph context from medical ontologies "
-        f"such as SNOMED CT, ICD-10, and curated clinical guidelines.\n\n"
-        f"The system will provide evidence-based, structured medical information "
-        f"tailored to your query."
+        "[KG answer not available — GPT fallback also unavailable]\n\n"
+        f'Your question "{question}" could not be answered right now. '
+        "Please ensure the Knowledge Graph is connected or set OPENAI_API_KEY "
+        "as a temporary fallback."
         + DISCLAIMER
     )
 
 
-# ---------------------------------------------------------------------------
-# Main public interface
-# ---------------------------------------------------------------------------
+# Public entry point — called by FastAPI
 def query_medical_knowledge(question: str) -> dict:
     """
     Main entry point called by the FastAPI layer.
+
+    Priority:
+      1. KG answer  → returned directly, GPT is skipped entirely
+      2. GPT answer → used only when KG returns None (temporary)
 
     Args:
         question (str): Medical question in English.
 
     Returns:
         dict: {
-            "answer": str,          # LLM / KG answer in English
-            "kg_used": bool,        # Whether KG context was used
-            "source": str           # Description of knowledge source used
+            "answer": str,    # final answer to show the user
+            "kg_used": bool,  # True when answer came from KG
+            "source": str     # human-readable source label
         }
     """
-    # Step 1: Retrieve from Knowledge Graph
-    kg_context = retrieve_from_kg(question)
+    # --- Priority 1: Knowledge Graph ---
+    kg_answer = retrieve_from_kg(question)
+    if kg_answer is not None:
+        return {
+            "answer": kg_answer,
+            "kg_used": True,
+            "source": "Knowledge Graph",
+        }
 
-    # Step 2: Generate answer via LLM (+ KG context if available)
-    answer = call_llm(question, kg_context)
-
+    # --- Priority 2: GPT fallback (temporary) ---
+    gpt_answer = _call_gpt_fallback(question)
     return {
-        "answer": answer,
-        "kg_used": kg_context is not None,
-        "source": "KG + GPT-4o-mini" if kg_context else "GPT-4o-mini (placeholder)",
+        "answer": gpt_answer,
+        "kg_used": False,
+        "source": "GPT-4o-mini (temporary fallback)",
     }

@@ -1,7 +1,9 @@
-# MediAssist — Multilingual Medical Chatbot
+# MediAssist — Multilingual NCD & Diet Chatbot
 
-A full-stack medical Q&A chatbot that supports **English**, **Kinyarwanda (rw)**, and **Taita/Dawida (dav)**.
+A full-stack Q&A chatbot focused on **Non-Communicable Diseases (NCDs) and diet/nutrition**, supporting **English**, **Kinyarwanda (rw)**, and **Taita/Dawida (dav)**.
 Users ask questions in their native language; the system transparently translates, queries the medical knowledge pipeline, and returns the answer back in the same language.
+
+> **Answer source priority:** The Knowledge Graph is the authoritative source. GPT-4o-mini is a temporary fallback used only while the KG is being built — it is bypassed entirely once `retrieve_from_kg()` returns a real answer.
 
 ---
 
@@ -33,7 +35,7 @@ src/
 │
 ├── KG/                         # Knowledge Graph + LLM module
 │   ├── __init__.py
-│   └── knowledge_graph.py      # KG retrieval + GPT-4o-mini (placeholder)
+│   └── knowledge_graph.py      # KG retrieval (primary) + GPT-4o-mini (temp fallback)
 │
 ├── UI/                         # Next.js 15 frontend (App Router)
 │   ├── app/
@@ -42,16 +44,16 @@ src/
 │   │   └── page.tsx            # Entry point → renders <ChatPage />
 │   ├── components/
 │   │   ├── ChatPage.tsx        # Root client component, all state lives here
-│   │   ├── Sidebar.tsx         # Language picker, quick topics, new chat
+│   │   ├── Sidebar.tsx         # Language picker, new chat button
 │   │   ├── Topbar.tsx          # Current language pill + status indicator
-│   │   ├── WelcomeScreen.tsx   # Shown before the first message
+│   │   ├── WelcomeScreen.tsx   # Shown before the first message (NCD suggestion cards)
 │   │   ├── MessageBubble.tsx   # Renders a single user/assistant/error message
 │   │   ├── TypingIndicator.tsx # Animated "…" bubble while waiting for API
 │   │   ├── ChatInput.tsx       # Auto-resizing textarea + send button
 │   │   └── TranslationToast.tsx# Floating notification during translation
 │   ├── lib/
 │   │   ├── types.ts            # Shared TypeScript interfaces
-│   │   ├── constants.ts        # Languages, quick topics, suggestion cards
+│   │   ├── constants.ts        # Languages + NCD-focused suggestion cards
 │   │   ├── api.ts              # fetch() wrappers for the FastAPI backend
 │   │   ├── format.ts           # Markdown formatter + disclaimer extractor
 │   │   └── nanoid.ts           # Tiny collision-resistant ID generator
@@ -85,15 +87,22 @@ src/
 │  1. Validate language code                                       │
 │  2. Translate input → English   ──► Modal Translation API       │
 │                                     (bereketfiseha123 endpoint) │
-│  3. Query KG + LLM  ──────────────► KG/knowledge_graph.py       │
-│                                     ├─ retrieve_from_kg()  [TODO]│
-│                                     └─ call_llm() → GPT-4o-mini │
+│  3. Query knowledge pipeline ─────► KG/knowledge_graph.py       │
+│       │                                                          │
+│       ├─ retrieve_from_kg() returns answer?                      │
+│       │     YES → use KG answer directly  (GPT never called)    │
+│       │     NO  → _call_gpt_fallback()    (temporary)           │
+│                                                                  │
 │  4. Translate answer → user language ► Modal Translation API    │
 │  5. Return ChatResponse JSON                                     │
 ├─────────────────────────────────────────────────────────────────┤
 │  Browser renders answer in the correct language                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+**Key design principle:** `retrieve_from_kg()` is the authoritative answer source. When it returns a string, that string goes directly to the user — `_call_gpt_fallback()` is never reached. GPT is a temporary stand-in only while the KG is being built. The `source` field in every API response tells you which path was taken:
+- `"Knowledge Graph"` — answer came from KG, GPT was not used
+- `"GPT-4o-mini (temporary fallback)"` — KG returned nothing, GPT was used
 
 The Next.js rewrite in `UI/next.config.ts` means the browser always calls `/api/*` on the same origin — no CORS configuration needed in development or production.
 
@@ -120,19 +129,23 @@ The Next.js rewrite in `UI/next.config.ts` means the browser always calls `/api/
 
 ---
 
-### KG — Knowledge Graph + LLM
+### KG — Knowledge Graph (Primary Answer Source)
 
 **File:** `KG/knowledge_graph.py`
 
-This is the core intelligence module. It has two stages:
+This is the core intelligence module. Answer source priority is strict:
 
-| Function | Status | Description |
-|---|---|---|
-| `retrieve_from_kg(query)` | **Placeholder** | Returns `None` — wire your graph retrieval here |
-| `call_llm(question, kg_context)` | Active | Calls GPT-4o-mini; falls back to a static response if no API key |
-| `query_medical_knowledge(question)` | Active | Public entry point called by FastAPI |
+| Priority | Function | Status | Description |
+|---|---|---|---|
+| **1 — Primary** | `retrieve_from_kg(query)` | **TODO** | Returns a complete answer string, or `None` if not found. When it returns a value, GPT is never called. |
+| **2 — Fallback** | `_call_gpt_fallback(question)` | Active (temporary) | Called only when `retrieve_from_kg()` returns `None`. Uses GPT-4o-mini. Remove once KG is fully wired. |
+| Entry point | `query_medical_knowledge(question)` | Active | Called by FastAPI. Runs priority 1, then priority 2 if needed. |
 
-**To plug in a real Knowledge Graph**, edit `retrieve_from_kg()` to return a context string from your graph (Neo4j Cypher, SPARQL, vector search, etc.). That string is automatically injected into the GPT-4o-mini prompt as `[Relevant Medical Knowledge]`.
+**The `source` field in API responses reflects which path was taken:**
+- `"Knowledge Graph"` → KG answered, GPT was bypassed
+- `"GPT-4o-mini (temporary fallback)"` → KG had no answer, GPT was used
+
+**To wire in your KG**, implement `retrieve_from_kg()` — see [Section 8](#8-wiring-in-the-knowledge-graph).
 
 ---
 
@@ -152,7 +165,6 @@ Calls `lib/api.ts → sendChatMessage()` and distributes results to child compon
 
 #### `components/Sidebar.tsx`
 - Language switcher (English / Kinyarwanda / Taita)
-- Quick topic buttons (pre-filled prompts)
 - New Conversation button
 - Collapses on mobile behind an overlay
 
@@ -162,7 +174,7 @@ Calls `lib/api.ts → sendChatMessage()` and distributes results to child compon
 - Live status dot (green = ready, amber pulsing = processing, red = error)
 
 #### `components/WelcomeScreen.tsx`
-Shown before the first message. Displays four suggestion cards. Clicking any card fires the prompt immediately.
+Shown before the first message. Displays four NCD-focused suggestion cards (hypertension, diabetes, heart attack, diet). Clicking any card fires the prompt immediately. Topic pills at the bottom show the scope: Hypertension, Diabetes, Heart Disease, Stroke, Obesity, Diet & Nutrition.
 
 #### `components/MessageBubble.tsx`
 Renders one message. Handles three roles:
@@ -170,7 +182,7 @@ Renders one message. Handles three roles:
 - `assistant` — white left-aligned card with markdown rendering and disclaimer box
 - `error` — red tinted card
 
-Displays translation tag, source badge (e.g. "GPT-4o-mini (placeholder)"), and timestamp in the meta row below the bubble.
+Displays translation tag, source badge (e.g. `"Knowledge Graph"` or `"GPT-4o-mini (temporary fallback)"`), and timestamp in the meta row below the bubble.
 
 #### `components/TypingIndicator.tsx`
 Three-dot animated bubble shown while the API call is in flight.
@@ -195,7 +207,7 @@ Two functions:
 - `formatTime(date)` — formats a Date to HH:MM
 
 #### `lib/constants.ts`
-Single source of truth for languages, quick topic prompts, and welcome screen suggestions. Edit this file to add new languages or topics.
+Single source of truth for languages and NCD-focused welcome screen suggestion cards. Edit this file to add new languages or update suggestion prompts.
 
 #### `lib/types.ts`
 Shared TypeScript interfaces: `Message`, `ChatApiRequest`, `ChatApiResponse`, `Language`, `LanguageCode`.
@@ -324,7 +336,7 @@ The main endpoint. Handles the full multilingual pipeline.
   "translated_input": "...",   // English translation of the input (null if English)
   "language": "rw",
   "kg_used": false,
-  "source": "GPT-4o-mini (placeholder)"
+  "source": "GPT-4o-mini (temporary fallback)"
 }
 ```
 
@@ -350,36 +362,45 @@ English-only, skips translation. Useful for backend testing.
 
 ---
 
-## 8. Extending the Knowledge Graph
+## 8. Wiring in the Knowledge Graph
 
-Open `KG/knowledge_graph.py` and implement `retrieve_from_kg()`:
+Open `KG/knowledge_graph.py` and implement `retrieve_from_kg()`. This is the **only function you need to change** — everything else (translation, API routing, UI display) is already wired up.
+
+**Contract:** return a plain string answer, or `None` if nothing found.
 
 ```python
 def retrieve_from_kg(query: str) -> Optional[str]:
-    # Example: Neo4j Cypher query
-    # driver = GraphDatabase.driver(NEO4J_URI, auth=(USER, PASS))
-    # results = driver.session().run("MATCH (d:Disease) WHERE ...")
-    # return format_results(results)
+    # When this returns a string → sent directly to user, GPT is never called
+    # When this returns None   → GPT-4o-mini fallback is used temporarily
 
-    # Example: SPARQL against SNOMED CT / ICD-10
-    # sparql.setQuery(f"SELECT ?label WHERE {{ ?s rdfs:label '{query}' }}")
+    # --- Example: Neo4j Cypher ---
+    # from neo4j import GraphDatabase
+    # driver = GraphDatabase.driver(os.getenv("NEO4J_URI"), auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASS")))
+    # with driver.session() as session:
+    #     result = session.run("MATCH (d:Disease {name: $q})-[:HAS_INFO]->(i) RETURN i.text", q=query)
+    #     record = result.single()
+    #     if record:
+    #         return record["i.text"]
 
-    # Example: vector similarity search
-    # embedding = embed(query)
-    # results = vector_store.search(embedding, top_k=5)
-    # return "\n".join(r.text for r in results)
+    # --- Example: SPARQL against SNOMED CT / ICD-10 ---
+    # from SPARQLWrapper import SPARQLWrapper, JSON
+    # sparql = SPARQLWrapper("https://your-endpoint/sparql")
+    # sparql.setQuery(f"SELECT ?label WHERE {{ ?s rdfs:label '{query}'@en }}")
+    # ...
 
-    return None  # Remove this line once implemented
+    # --- Example: vector similarity search (RAG) ---
+    # embedding = embed_query(query)
+    # results = vector_store.similarity_search(embedding, top_k=3)
+    # if results:
+    #     return "\n\n".join(r.page_content for r in results)
+
+    return None  # ← remove this line once your KG is connected
 ```
 
-The returned string is automatically prepended to the GPT-4o-mini prompt as:
-```
-[Relevant Medical Knowledge]
-<your KG context here>
-
-[Patient Question]
-<user's question>
-```
+Once `retrieve_from_kg()` returns real answers:
+- `kg_used` in the API response flips to `true`
+- The source badge in the UI shows `"Knowledge Graph"` instead of `"GPT-4o-mini (temporary fallback)"`
+- You can safely remove `_call_gpt_fallback()` and the `openai` dependency
 
 ---
 
@@ -406,8 +427,14 @@ curl -X POST https://bereketfiseha123--translate-multilingual.modal.run \
   -d '{"text": "hello", "direction": "en-rw"}'
 ```
 
+**`OPENAI_API_KEY` is set but GPT still not responding**
+Restart the uvicorn server after editing `.env` — environment variables are loaded at startup, not on each request.
+
+**`kg_used` is always `false` in API responses**
+Expected — `retrieve_from_kg()` currently returns `None` (not yet implemented). Once you wire in your KG, it will return `true`.
+
 **OpenAI returns a placeholder response instead of a real answer**
-The `.env` file is missing or the `OPENAI_API_KEY` is not set. The system will still work — it just returns the static placeholder text.
+The `.env` file is missing or `OPENAI_API_KEY` is not set. The GPT fallback will return a descriptive error message instead. See [Environment Setup](#5-environment-setup).
 
 **UI shows "Unable to connect to the MediAssist server"**
 The FastAPI backend is not running. Start it in a separate terminal (see [Running the Project](#6-running-the-project)).
