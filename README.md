@@ -1,9 +1,7 @@
 # MediAssist — Multilingual NCD & Diet Chatbot
 
-A full-stack Q&A chatbot focused on **Non-Communicable Diseases (NCDs) and diet/nutrition**, supporting **English**, **Kinyarwanda (rw)**, and **Taita/Dawida (dav)**.
+A full-stack Medical Q&A chatbot focused on **Non-Communicable Diseases (NCDs) and diet/nutrition**, supporting **English**, **Kinyarwanda (rw)**, and **Taita/Dawida (dav)**.
 Users ask questions in their native language; the system transparently translates, queries the medical knowledge pipeline, and returns the answer back in the same language.
-
-> **Answer source priority:** The Knowledge Graph is the authoritative source. GPT-4o-mini is a temporary fallback used only while the KG is being built — it is bypassed entirely once `retrieve_from_kg()` returns a real answer.
 
 ---
 
@@ -373,28 +371,6 @@ def retrieve_from_kg(query: str) -> Optional[str]:
     # When this returns a string → sent directly to user, GPT is never called
     # When this returns None   → GPT-4o-mini fallback is used temporarily
 
-    # --- Example: Neo4j Cypher ---
-    # from neo4j import GraphDatabase
-    # driver = GraphDatabase.driver(os.getenv("NEO4J_URI"), auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASS")))
-    # with driver.session() as session:
-    #     result = session.run("MATCH (d:Disease {name: $q})-[:HAS_INFO]->(i) RETURN i.text", q=query)
-    #     record = result.single()
-    #     if record:
-    #         return record["i.text"]
-
-    # --- Example: SPARQL against SNOMED CT / ICD-10 ---
-    # from SPARQLWrapper import SPARQLWrapper, JSON
-    # sparql = SPARQLWrapper("https://your-endpoint/sparql")
-    # sparql.setQuery(f"SELECT ?label WHERE {{ ?s rdfs:label '{query}'@en }}")
-    # ...
-
-    # --- Example: vector similarity search (RAG) ---
-    # embedding = embed_query(query)
-    # results = vector_store.similarity_search(embedding, top_k=3)
-    # if results:
-    #     return "\n\n".join(r.page_content for r in results)
-
-    return None  # ← remove this line once your KG is connected
 ```
 
 Once `retrieve_from_kg()` returns real answers:
