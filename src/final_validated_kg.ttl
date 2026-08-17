@@ -1,0 +1,1279 @@
+@prefix doc: <http://purl.org/health/documents/> .
+@prefix hlth: <http://purl.org/health/schema#> .
+@prefix local: <http://health-nutrition-kgm.org/modules/local_foods#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+local:autoimmune_conditions a hlth:Condition ;
+    rdfs:label "Autoimmune Conditions"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:should_avoid local:breads,
+        local:chocolate,
+        local:coffee,
+        local:dairy,
+        local:grains,
+        local:nightshade_vegetables,
+        local:processed_foods,
+        obo:FOODON_00001105,
+        obo:FOODON_00002753,
+        obo:FOODON_03303171 ;
+    hlth:source_doc "health&nutrition_autoimmune_conditions_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_autoimmune_conditions_infosheet .
+
+local:brown_rice a hlth:FoodItem ;
+    rdfs:label "Brown Rice"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:starch ;
+    hlth:source_doc "health&nutrition_type2diabetes_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_type2diabetes_infosheet .
+
+local:chondroitin a hlth:FoodItem ;
+    rdfs:label "Chondroitin"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:collagen_peptides a hlth:FoodItem ;
+    rdfs:label "Collagen Peptides"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:coronary_heart_disease a hlth:Condition ;
+    rdfs:label "Coronary Heart Disease"@en ;
+    hlth:can_lead_to obo:DOID_114 ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:source_doc "WHO EMRO - Diet, nutrition and hypertension.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:WHO%20EMRO%20-%20Diet%2C%20nutrition%20and%20hypertension .
+
+local:excessive_sodium_consumption a hlth:Condition ;
+    rdfs:label "Excessive Consumption Of Sodium"@en ;
+    hlth:can_lead_to obo:DOID_114 ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:source_doc "ncd_prevalence_rbc.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:ncd_prevalence_rbc .
+
+local:glucosamine a hlth:FoodItem ;
+    rdfs:label "Glucosamine"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:knee_osteoarthritis a hlth:Condition ;
+    rdfs:label "Knee Osteoarthritis"@en ;
+    hlth:can_lead_to local:cartilage_compositional_degeneration,
+        local:knee_synovial_inflammation,
+        local:structural_degeneration,
+        obo:DOID_8398 ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:millet a hlth:FoodItem ;
+    rdfs:label "Millet"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:healthy_grains ;
+    hlth:source_doc "health&nutrition_type2diabetes_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_type2diabetes_infosheet .
+
+local:omega_3_fatty_acids a hlth:Nutrient ;
+    rdfs:label "Omega-3 Fatty Acids"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+obo:DOID_13189 a hlth:Condition ;
+    rdfs:label "Gout"@en ;
+    obo:IAO_0000115 "An arthritis that has_material_basis_in uric acid crystal deposits located_in joint."@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:should_avoid local:beer,
+        local:spinach,
+        local:tomatoes,
+        obo:FOODON_03400794 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "arthritis_article_cpdh.pdf"^^xsd:string ;
+    rdfs:comment "An arthritis that has_material_basis_in uric acid crystal deposits located_in joint."@en ;
+    prov:wasDerivedFrom doc:arthritis_article_cpdh .
+
+obo:DOID_7148 a hlth:Condition ;
+    rdfs:label "Rheumatoid Arthritis"@en ;
+    obo:IAO_0000115 "An arthritis that is an autoimmune disease which attacks healthy cells and tissue located_in joint."@en ;
+    hlth:can_lead_to local:severe_joint_damage,
+        obo:DOID_114 ;
+    hlth:confidence "gold"^^xsd:string,
+        "silver"^^xsd:string ;
+    hlth:has_symptom local:chronic_pain,
+        local:joint_stiffness,
+        local:loss_of_appetite,
+        local:pain,
+        local:poor_sleep_quality,
+        local:swelling_in_the_joints,
+        obo:SYMP_0000064,
+        obo:SYMP_0000538 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "arthritis_article_cpdh.pdf"^^xsd:string,
+        "health&nutrition_autoimmune_conditions_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "An arthritis that is an autoimmune disease which attacks healthy cells and tissue located_in joint."@en ;
+    prov:wasDerivedFrom doc:arthritis_article_cpdh,
+        doc:health%26nutrition_autoimmune_conditions_infosheet .
+
+obo:DOID_9074 a hlth:Condition ;
+    rdfs:label "Lupus"@en ;
+    obo:IAO_0000115 "A lupus erythematosus that is an inflammation of connective tissue marked by skin rashes, joint pain and swelling, inflammation of the kidneys and inflammation of the tissue surrounding the heart."@en ;
+    hlth:can_lead_to local:severe_organ_damage ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:has_symptom local:butterfly_shaped_rash_across_the_face,
+        local:chest_pain,
+        local:fever,
+        local:joint_stiffness,
+        local:rashes_on_other_parts_of_the_body,
+        local:shortness_of_breath,
+        local:tiredness,
+        obo:SYMP_0000064 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "health&nutrition_autoimmune_conditions_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A lupus erythematosus that is an inflammation of connective tissue marked by skin rashes, joint pain and swelling, inflammation of the kidneys and inflammation of the tissue surrounding the heart."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_autoimmune_conditions_infosheet .
+
+obo:EXMO_0000166 a hlth:PhysicalActivity ;
+    rdfs:label "Dynamic Stretches"@en ;
+    obo:IAO_0000115 "Aerobics is a form of physical exercise that combines rhythmic aerobic exercise with stretching and strength training routines with the goal of improving all elements of fitness (flexibility, muscular strength, and cardio-vascular fitness)."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:sourceOntology "EXMO"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "Aerobics is a form of physical exercise that combines rhythmic aerobic exercise with stretching and strength training routines with the goal of improving all elements of fitness (flexibility, muscular strength, and cardio-vascular fitness)."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+obo:FOODON_00003108 a hlth:FoodItem ;
+    rdfs:label "Barley"@en ;
+    obo:IAO_0000115 "Barley is a cultivated grain used as animal fodder, as a source of fermentable material for beer and certain distilled beverages, and as a component of various health foods. It is used in soups and stews, and in barley bread of various cultures. Barley grains are commonly made into malt in a traditional and ancient method of preparation."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:healthy_grains ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_type2diabetes_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "Barley is a cultivated grain used as animal fodder, as a source of fermentable material for beer and certain distilled beverages, and as a component of various health foods. It is used in soups and stews, and in barley bread of various cultures. Barley grains are commonly made into malt in a traditional and ancient method of preparation."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_type2diabetes_infosheet .
+
+obo:FOODON_00003540 a hlth:FoodItem ;
+    rdfs:label "Papaya"@en ;
+    obo:IAO_0000115 "A pepo fruit of a papaya tree (Carica papaya)."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:contains_nutrient local:fibre ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_hypertension_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A pepo fruit of a papaya tree (Carica papaya)."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_hypertension_infosheet .
+
+obo:FOODON_00004183 a hlth:FoodItem ;
+    rdfs:label "Banana"@en ;
+    obo:IAO_0000115 "A berry fruit from a banana tree (genus Musa)."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:contains_nutrient local:fibre ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_hypertension_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A berry fruit from a banana tree (genus Musa)."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_hypertension_infosheet .
+
+obo:FOODON_03000111 a hlth:FoodItem ;
+    rdfs:label "Mrenda"@en ;
+    obo:IAO_0000115 "A leaf of a nalta jute plant."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:spinach ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A leaf of a nalta jute plant."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+obo:FOODON_03310765 a hlth:FoodItem ;
+    rdfs:label "Leafy Greens"@en ;
+    obo:IAO_0000115 "A plant leaf vegetable food product which is a bunch of raw leaves."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:contains_ingredient local:edible_leaves_and_stems_of_plants ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A plant leaf vegetable food product which is a bunch of raw leaves."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+obo:FOODON_03411150 a hlth:FoodItem ;
+    rdfs:label "Nderema"@en ;
+    obo:IAO_0000115 "A fast-growing leafy climbing plant."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:spinach ;
+    hlth:sourceOntology "LOCAL"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "A fast-growing leafy climbing plant."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+obo:FOODON_03413409 a hlth:FoodItem ;
+    rdfs:label "Managu"@en ;
+    obo:IAO_0000115 "Solanum nigrum (European Black Nightshade or locally just \"black nightshade\", Duscle, Garden Nightshade, Hound's Berry, Petty Morel, Wonder Berry, Small-fruited black nightshade or popolo) is a species in the *Solanum* genus, native to Eurasia and introduced in the Americas, Australasia and South Africa. Parts of this plant can be highly toxic to livestock and humans, and it's considered a weed. Nonetheless, ripe berries and cooked leaves of edible strains are used as food in some locales; and plant parts are used as a traditional medicine."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:spinach ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "Solanum nigrum (European Black Nightshade or locally just \"black nightshade\", Duscle, Garden Nightshade, Hound's Berry, Petty Morel, Wonder Berry, Small-fruited black nightshade or popolo) is a species in the *Solanum* genus, native to Eurasia and introduced in the Americas, Australasia and South Africa. Parts of this plant can be highly toxic to livestock and humans, and it's considered a weed. Nonetheless, ripe berries and cooked leaves of edible strains are used as food in some locales; and plant parts are used as a traditional medicine."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+obo:IAO_0000115 a owl:AnnotationProperty ;
+    rdfs:label "definition"@en .
+
+obo:NCIT_C21057 a hlth:PhysicalActivity ;
+    rdfs:label "Static Stretches"@en ;
+    obo:IAO_0000115 "An exercise that is performed by exerting force against an immovable object or by holding an object in a static position."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:sourceOntology "EXMO"^^xsd:string ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "An exercise that is performed by exerting force against an immovable object or by holding an object in a static position."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+hlth:advises_caution_for a owl:ObjectProperty ;
+    rdfs:domain hlth:PhysicalActivity ;
+    rdfs:range hlth:Condition .
+
+hlth:can_lead_to a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition ;
+    rdfs:range hlth:Condition .
+
+hlth:contains_ingredient a owl:ObjectProperty ;
+    rdfs:domain hlth:FoodItem ;
+    rdfs:range hlth:FoodItem .
+
+hlth:contains_nutrient a owl:ObjectProperty ;
+    rdfs:domain hlth:FoodItem ;
+    rdfs:range hlth:Nutrient .
+
+hlth:has_description a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition ;
+    rdfs:range hlth:Description .
+
+hlth:has_symptom a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition ;
+    rdfs:range hlth:Symptom .
+
+hlth:helps_manage a owl:ObjectProperty ;
+    rdfs:domain hlth:PhysicalActivity ;
+    rdfs:range hlth:Condition .
+
+hlth:is_a_type_of a owl:ObjectProperty ;
+    rdfs:domain hlth:FoodItem ;
+    rdfs:range hlth:FoodItem .
+
+hlth:limits a owl:ObjectProperty ;
+    rdfs:domain hlth:Diet ;
+    rdfs:range hlth:FoodItem .
+
+hlth:limits_food a owl:ObjectProperty ;
+    rdfs:domain hlth:Diet ;
+    rdfs:range hlth:FoodItem .
+
+hlth:managed_by a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition .
+
+hlth:may_cause_symptom a owl:ObjectProperty ;
+    rdfs:domain hlth:PhysicalActivity ;
+    rdfs:range hlth:Symptom .
+
+hlth:recommends a owl:ObjectProperty ;
+    rdfs:domain hlth:Diet ;
+    rdfs:range hlth:FoodItem .
+
+hlth:recommends_food a owl:ObjectProperty ;
+    rdfs:domain hlth:Diet ;
+    rdfs:range hlth:FoodItem .
+
+hlth:should_avoid a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition ;
+    rdfs:range hlth:FoodItem .
+
+hlth:should_avoid_food a owl:ObjectProperty ;
+    rdfs:domain hlth:Condition ;
+    rdfs:range hlth:FoodItem .
+
+hlth:source_doc a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+local:ace_inhibitor a hlth:ManagementStrategy ;
+    rdfs:label "ACEI"@en .
+
+local:added_sugar a hlth:Nutrient ;
+    rdfs:label "Added Sugar"@en .
+
+local:angiotensin_receptor_blocker a hlth:ManagementStrategy ;
+    rdfs:label "ARB"@en .
+
+local:animal_fat a hlth:FoodItem ;
+    rdfs:label "Animal Fat"@en .
+
+local:anti_inflammatory_diet a hlth:Diet ;
+    rdfs:label "Anti-Inflammatory Diet"@en .
+
+local:antioxidants a hlth:Nutrient ;
+    rdfs:label "Antioxidants"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:aspirin_therapy a hlth:ManagementStrategy ;
+    rdfs:label "Aspirin Therapy"@en .
+
+local:avoid_decrease_alcohol_intake a hlth:ManagementStrategy ;
+    rdfs:label "Avoid/Decrease Alcohol Intake"@en .
+
+local:beer a hlth:FoodItem ;
+    rdfs:label "Beer"@en .
+
+local:bell_peppers a hlth:FoodItem ;
+    rdfs:label "Bell Peppers"@en .
+
+local:bent_back_when_standing a hlth:Symptom ;
+    rdfs:label "Bent Back When Standing"@en .
+
+local:biscuits a hlth:FoodItem ;
+    rdfs:label "Biscuits"@en .
+
+local:boswellia_serrata a hlth:Diet ;
+    rdfs:label "Boswellia Serrata"@en .
+
+local:breads a hlth:FoodItem ;
+    rdfs:label "Breads"@en .
+
+local:butter a hlth:FoodItem ;
+    rdfs:label "Butter"@en .
+
+local:butterfly_shaped_rash_across_the_face a hlth:Symptom ;
+    rdfs:label "Butterfly Shaped Rash Across The Face"@en .
+
+local:cakes a hlth:FoodItem ;
+    rdfs:label "Cakes"@en .
+
+local:cardiovascular_disease a hlth:Condition ;
+    rdfs:label "Cardiovascular Disease"@en .
+
+local:cartilage_compositional_degeneration a hlth:Condition ;
+    rdfs:label "Cartilage Compositional Degeneration"@en .
+
+local:chicken a hlth:FoodItem ;
+    rdfs:label "Chicken"@en .
+
+local:chilli_peppers a hlth:FoodItem ;
+    rdfs:label "Chilli Peppers"@en .
+
+local:chocolate a hlth:FoodItem ;
+    rdfs:label "Chocolate"@en .
+
+local:chronic_pain a hlth:Symptom ;
+    rdfs:label "Chronic Pain"@en .
+
+local:coffee a hlth:FoodItem ;
+    rdfs:label "Coffee"@en .
+
+local:curcumin a hlth:Diet ;
+    rdfs:label "Curcumin"@en .
+
+local:damage_to_blood_vessels_in_eyes a hlth:Condition ;
+    rdfs:label "Damage To Blood Vessels In Eyes"@en .
+
+local:diet_education a hlth:Diet ;
+    rdfs:label "Diet Education"@en .
+
+local:diet_high_in_phytochemicals a hlth:Diet ;
+    rdfs:label "Diet High In Phytochemicals"@en .
+
+local:edible_leaves_and_stems_of_plants a hlth:FoodItem ;
+    rdfs:label "Edible Leaves and Stems of Plants"@en .
+
+local:eggplant a hlth:FoodItem ;
+    rdfs:label "Eggplant"@en .
+
+local:energy_restricted_diet a hlth:Diet ;
+    rdfs:label "Energy-Restricted Diet"@en .
+
+local:energy_restriction a hlth:ManagementStrategy ;
+    rdfs:label "Energy Restriction"@en .
+
+local:excessive_salt a hlth:FoodItem ;
+    rdfs:label "Excessive Salt Consumption"@en .
+
+local:exercise a hlth:PhysicalActivity ;
+    rdfs:label "Exercise"@en .
+
+local:exercise_30_60_min_moderate_intensity a hlth:PhysicalActivity ;
+    rdfs:label "Exercise 30-60 Min Moderate Intensity"@en .
+
+local:fat_free_or_low_fat_dairy_products a hlth:FoodItem ;
+    rdfs:label "Fat-Free Or Low-Fat Dairy Products"@en .
+
+local:feeling_very_thirsty a hlth:Symptom ;
+    rdfs:label "Feeling Very Thirsty"@en .
+
+local:fever a hlth:Symptom ;
+    rdfs:label "Fever"@en .
+
+local:fiber a hlth:Nutrient ;
+    rdfs:label "Fiber"@en .
+
+local:fisetin a hlth:Diet ;
+    rdfs:label "Fisetin"@en .
+
+local:fish_oil a hlth:FoodItem ;
+    rdfs:label "Fish Oil"@en .
+
+local:food_portion a hlth:FoodItem ;
+    rdfs:label "Food Portion"@en .
+
+local:gentle_stretching_exercises a hlth:PhysicalActivity ;
+    rdfs:label "Gentle Stretching Exercises"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+local:grains a hlth:FoodItem ;
+    rdfs:label "Grains"@en .
+
+local:green_tea a hlth:Diet ;
+    rdfs:label "Green Tea"@en .
+
+local:healthier_diet a hlth:Diet ;
+    rdfs:label "Healthier Diet"@en .
+
+local:healthy_eating_habits a hlth:Diet ;
+    rdfs:label "Healthy Eating Habits"@en .
+
+local:healthy_weight_management a hlth:ManagementStrategy ;
+    rdfs:label "Healthy Weight"@en .
+
+local:high_fat_diet a hlth:FoodItem ;
+    rdfs:label "High-Fat Diet"@en .
+
+local:high_fiber_intake a hlth:ManagementStrategy ;
+    rdfs:label "High Fiber Intake"@en .
+
+local:increasing_physical_activity a hlth:ManagementStrategy ;
+    rdfs:label "Increasing Physical Activity"@en .
+
+local:inflammatory_pathways_modulation a hlth:Description ;
+    rdfs:label "Inflammatory Pathways Modulation"@en .
+
+local:joint_pain_in_back a hlth:Symptom ;
+    rdfs:label "Joint Pain in the Back"@en .
+
+local:joint_pain_in_elbows a hlth:Symptom ;
+    rdfs:label "Joint Pain in the Elbows"@en .
+
+local:joint_pain_in_knees a hlth:Symptom ;
+    rdfs:label "Joint Pain in the Knees"@en .
+
+local:knee_synovial_inflammation a hlth:Condition ;
+    rdfs:label "Knee Synovial Inflammation"@en .
+
+local:leptin a hlth:Nutrient ;
+    rdfs:label "Leptin"@en .
+
+local:limiting_alcohol a hlth:ManagementStrategy ;
+    rdfs:label "Limiting Alcohol"@en .
+
+local:loss_of_appetite a hlth:Symptom ;
+    rdfs:label "Loss Of Appetite"@en .
+
+local:loss_of_vision a hlth:Condition ;
+    rdfs:label "Loss Of Vision"@en .
+
+local:low_dietary_inflammatory_index a hlth:ManagementStrategy ;
+    rdfs:label "Lower Dietary Inflammatory Index Scores"@en .
+
+local:low_fat_dairy_products a hlth:FoodItem ;
+    rdfs:label "Low-Fat Dairy Products"@en .
+
+local:low_fat_diet a hlth:Diet ;
+    rdfs:label "Low-Fat Diet"@en .
+
+local:low_fat_low_carbohydrates_diet a hlth:Diet ;
+    rdfs:label "Low Fat, Low Carbohydrates Diet"@en .
+
+local:low_intake_of_fruits_and_vegetables a hlth:FoodItem ;
+    rdfs:label "Low Intake Of Fruits And Vegetables"@en .
+
+local:low_salt_diet a hlth:Diet ;
+    rdfs:label "Low-Salt Diet"@en .
+
+local:lying_down_and_breathing_slowly_and_mindfully a hlth:ManagementStrategy ;
+    rdfs:label "Lying Down And Breathing Slowly And Mindfully"@en .
+
+local:management_strategy_limit_fats_and_oils a hlth:ManagementStrategy ;
+    rdfs:label "Limit Intake Of Fats And Oils"@en .
+
+local:management_strategy_limit_salt a hlth:ManagementStrategy ;
+    rdfs:label "Limit Salt Intake"@en .
+
+local:management_strategy_limit_sugars a hlth:ManagementStrategy ;
+    rdfs:label "Limit Intake Of Sugars"@en .
+
+local:management_strategy_maintain_healthy_body_weight a hlth:ManagementStrategy ;
+    rdfs:label "Maintain A Healthy Body Weight"@en .
+
+local:meat a hlth:FoodItem ;
+    rdfs:label "Meat"@en .
+
+local:mediterranean_diet a hlth:Diet ;
+    rdfs:label "Mediterranean Diet"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:managed_by obo:DOID_8398 ;
+    hlth:recommends local:dairy,
+        local:fruits,
+        local:legumes,
+        obo:FOODON_00001248,
+        obo:FOODON_00003816,
+        obo:FOODON_00003950 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:mediterranean_type_diet a hlth:Diet ;
+    rdfs:label "Mediterranean Type Diet"@en .
+
+local:monounsaturated_fat a hlth:Nutrient ;
+    rdfs:label "Monounsaturated Fats"@en .
+
+local:nightshade_vegetables a hlth:FoodItem ;
+    rdfs:label "Nightshade Vegetables"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:contains_ingredient local:bell_peppers,
+        local:chilli_peppers,
+        local:eggplant,
+        local:potatoes,
+        local:tomatoes ;
+    hlth:source_doc "health&nutrition_autoimmune_conditions_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_autoimmune_conditions_infosheet .
+
+local:nutritional_interventions a hlth:Diet ;
+    rdfs:label "Nutritional Interventions"@en .
+
+local:oleate a hlth:Nutrient ;
+    rdfs:label "Oleate"@en .
+
+local:oligofructose a hlth:Diet ;
+    rdfs:label "Oligofructose"@en .
+
+local:olive_oil a hlth:FoodItem ;
+    rdfs:label "Olive Oil"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:contains_nutrient local:monounsaturated_fat ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:omega_3_fatty_acid a hlth:Nutrient ;
+    rdfs:label "Omega-3 Fatty Acids"@en .
+
+local:omega_3_rich_diet a hlth:Diet ;
+    rdfs:label "Omega-3 Rich Diet"@en .
+
+local:osteoarthritic_symptoms a hlth:Symptom ;
+    rdfs:label "Osteoarthritic Symptoms"@en .
+
+local:palmitate a hlth:Nutrient ;
+    rdfs:label "Palmitate"@en .
+
+local:physical_activity_20_minutes a hlth:PhysicalActivity ;
+    rdfs:label "Physical Activity 20 Minutes"@en .
+
+local:physical_activity_30min_5days a hlth:PhysicalActivity ;
+    rdfs:label "Physical Activity: 30min/d/5days"@en .
+
+local:plant_based_diet a hlth:Diet ;
+    rdfs:label "Plant-Based"@en,
+        "Plant-Based Diet"@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:recommends local:antioxidants,
+        local:fiber,
+        local:fruit,
+        local:fruits,
+        local:legumes,
+        obo:FOODON_00003816,
+        obo:FOODON_00003950 ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+local:plant_forward_diet a hlth:Diet ;
+    rdfs:label "Plant-Forward Patterns"@en .
+
+local:polyphenols a hlth:Diet ;
+    rdfs:label "Polyphenols"@en .
+
+local:poor_sleep_quality a hlth:Symptom ;
+    rdfs:label "Poor Sleep Quality"@en .
+
+local:pro_inflammatory_diet a hlth:Diet ;
+    rdfs:label "Pro-Inflammatory Diet"@en .
+
+local:processed_foods a hlth:FoodItem ;
+    rdfs:label "Processed Foods"@en .
+
+local:prudent_diet a hlth:Diet ;
+    rdfs:label "Prudent Diet"@en .
+
+local:quercetin a hlth:Diet ;
+    rdfs:label "Quercetin"@en .
+
+local:quitting_smoking a hlth:ManagementStrategy ;
+    rdfs:label "Quitting Smoking"@en .
+
+local:quitting_tobacco a hlth:ManagementStrategy ;
+    rdfs:label "Quitting Tobacco"@en .
+
+local:rashes_on_other_parts_of_the_body a hlth:Symptom ;
+    rdfs:label "Rashes On Other Parts Of The Body"@en .
+
+local:reduced_mobility a hlth:Symptom ;
+    rdfs:label "Reduced Mobility"@en .
+
+local:reducing_calories a hlth:ManagementStrategy ;
+    rdfs:label "Reducing Calories"@en .
+
+local:reducing_salt_intake a hlth:ManagementStrategy ;
+    rdfs:label "Reducing Salt Intake"@en .
+
+local:reducing_saturated_fat_intake a hlth:ManagementStrategy ;
+    rdfs:label "Reducing Saturated Fat Intake"@en .
+
+local:refined_carbohydrates a hlth:FoodItem ;
+    rdfs:label "Refined Carbohydrates"@en .
+
+local:regular_meal_plan a hlth:Diet ;
+    rdfs:label "Regular Meal Plan"@en .
+
+local:resistin a hlth:Nutrient ;
+    rdfs:label "Resistin"@en .
+
+local:resveratrol a hlth:Diet ;
+    rdfs:label "Resveratrol"@en .
+
+local:running a hlth:PhysicalActivity ;
+    rdfs:label "Running"@en .
+
+local:running_or_jogging a hlth:PhysicalActivity ;
+    rdfs:label "Running Or Jogging"@en .
+
+local:salt a hlth:FoodItem ;
+    rdfs:label "Salt"@en .
+
+local:salty_food a hlth:FoodItem ;
+    rdfs:label "Salty Food"@en .
+
+local:seeds a hlth:FoodItem ;
+    rdfs:label "Seeds"@en .
+
+local:severe_joint_damage a hlth:Condition ;
+    rdfs:label "Severe Joint Damage"@en .
+
+local:severe_organ_damage a hlth:Condition ;
+    rdfs:label "Severe Organ Damage"@en .
+
+local:shortness_of_breath a hlth:Symptom ;
+    rdfs:label "Shortness Of Breath"@en .
+
+local:slow_low_impact_exercise a hlth:PhysicalActivity ;
+    rdfs:label "Slow, Low Impact Exercise"@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:helps_manage obo:DOID_8398 ;
+    hlth:source_doc "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:health%26nutrition_osteoarthritis_infosheet .
+
+local:smoking_cessation a hlth:ManagementStrategy ;
+    rdfs:label "Smoking Cessation"@en .
+
+local:starch a hlth:FoodItem ;
+    rdfs:label "Starch"@en .
+
+local:statins a hlth:ManagementStrategy ;
+    rdfs:label "Statins"@en .
+
+local:strength_building_exercises a hlth:PhysicalActivity ;
+    rdfs:label "Strength Building Exercises"@en .
+
+local:stress_management a hlth:ManagementStrategy ;
+    rdfs:label "Stress Management"@en .
+
+local:structural_degeneration a hlth:Condition ;
+    rdfs:label "Structural Degeneration"@en .
+
+local:sugar_containing_beverage a hlth:FoodItem ;
+    rdfs:label "Sugar-Containing Beverage"@en .
+
+local:sugar_containing_beverages a hlth:FoodItem ;
+    rdfs:label "Sugar-Containing Beverages"@en .
+
+local:sugary_drinks a hlth:FoodItem ;
+    rdfs:label "Sugary Drinks"@en .
+
+local:sugary_foods a hlth:FoodItem ;
+    rdfs:label "Sugary Foods"@en .
+
+local:sweet a hlth:FoodItem ;
+    rdfs:label "Sweet"@en .
+
+local:swelling_in_the_joints a hlth:Symptom ;
+    rdfs:label "Swelling In The Joints"@en .
+
+local:systolic_pressure_above_140_mmhg_and_diastolic_pressure_above_90_mmhg a hlth:Description ;
+    rdfs:label "Systolic Pressure Above 140 mmHg And Diastolic Pressure Above 90 mmHg"@en .
+
+local:tiredness a hlth:Symptom ;
+    rdfs:label "Tiredness"@en .
+
+local:trans_fats a hlth:FoodItem ;
+    rdfs:label "Trans Fats"@en .
+
+local:walking a hlth:PhysicalActivity ;
+    rdfs:label "Walking"@en .
+
+local:weight_control a hlth:ManagementStrategy ;
+    rdfs:label "Weight Control"@en .
+
+local:weight_loss a hlth:ManagementStrategy ;
+    rdfs:label "Weight Loss"@en .
+
+local:western_diet a hlth:FoodItem ;
+    rdfs:label "Western Diet"@en .
+
+local:western_diet_high_in_omega_6 a hlth:FoodItem ;
+    rdfs:label "Western Diet High In Omega-6 Fatty Acids"@en .
+
+local:whole_food_plant_based_diet a hlth:Diet ;
+    rdfs:label "Whole-Food Plant-Based Diet"@en .
+
+local:whole_foods_plant_based_diet a hlth:Diet ;
+    rdfs:label "Whole-Foods, Plant-Based Diet"@en .
+
+local:whole_fruits a hlth:FoodItem ;
+    rdfs:label "Whole Fruits"@en .
+
+local:whole_joint_disease a hlth:Description ;
+    rdfs:label "Whole-Joint Disease"@en .
+
+obo:DOID_0051061 a hlth:Condition ;
+    rdfs:label "Stroke"@en ;
+    obo:IAO_0000115 "A cerebrovascular disease that is characterized by disruption of blood flow to the brain resulting in damage to brain cells due to a lack of oxygen."@en ;
+    rdfs:comment "A cerebrovascular disease that is characterized by disruption of blood flow to the brain resulting in damage to brain cells due to a lack of oxygen."@en .
+
+obo:DOID_10763 a hlth:Condition ;
+    rdfs:label "Hypertension"@en ;
+    obo:IAO_0000115 "An artery disease characterized by chronic elevated blood pressure in the arteries."@en ;
+    hlth:can_lead_to obo:DOID_0051061,
+        obo:DOID_114,
+        obo:DOID_557 ;
+    hlth:confidence "gold"^^xsd:string,
+        "silver"^^xsd:string ;
+    hlth:has_description local:systolic_pressure_above_140_mmhg_and_diastolic_pressure_above_90_mmhg ;
+    hlth:has_symptom local:chest_pain,
+        obo:SYMP_0000012,
+        obo:SYMP_0000458,
+        obo:SYMP_0000504,
+        obo:SYMP_0000610 ;
+    hlth:managed_by local:breastfeeding,
+        local:dash_diet,
+        local:fish_oil,
+        local:fruit,
+        local:fruits,
+        local:healthier_diet,
+        local:healthy_diet,
+        local:healthy_weight_management,
+        local:increasing_physical_activity,
+        local:limiting_alcohol,
+        local:low_salt_diet,
+        local:olive_oil,
+        local:physical_activity,
+        local:quitting_tobacco,
+        local:reducing_calories,
+        local:reducing_salt_intake,
+        local:reducing_saturated_fat_intake,
+        local:running,
+        local:running_or_jogging,
+        local:strength_building_exercises,
+        local:stress_management,
+        local:walking,
+        local:weight_management,
+        obo:EXMO_0000184,
+        obo:EXMO_0000200,
+        obo:FOODON_00003816,
+        obo:NCIT_C172269,
+        obo:NCIT_C180667,
+        obo:NCIT_C85401,
+        obo:NCIT_C94738 ;
+    hlth:should_avoid local:animal_fat,
+        local:butter,
+        local:excessive_salt,
+        local:low_intake_of_fruits_and_vegetables,
+        local:processed_meat,
+        local:salt,
+        local:salty_food,
+        local:saturated_fat,
+        local:sodium,
+        local:trans_fats,
+        obo:FOODON_03400794 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "DASH diet_ Healthy eating to lower your blood pressure - Mayo Clinic.pdf"^^xsd:string,
+        "Hypertension_who.pdf"^^xsd:string,
+        "WHO EMRO - Diet, nutrition and hypertension.pdf"^^xsd:string,
+        "health&nutrition_hypertension_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "An artery disease characterized by chronic elevated blood pressure in the arteries."@en ;
+    prov:wasDerivedFrom doc:DASH%20diet_%20Healthy%20eating%20to%20lower%20your%20blood%20pressure%20-%20Mayo%20Clinic,
+        doc:Hypertension_who,
+        doc:WHO%20EMRO%20-%20Diet%2C%20nutrition%20and%20hypertension,
+        doc:health%26nutrition_hypertension_infosheet .
+
+obo:EXMO_0000183 a hlth:PhysicalActivity ;
+    rdfs:label "Gentle Walking"@en ;
+    obo:IAO_0000115 "Moderate walking refers to brisk walking at a pace that increases heart rate and breathing noticeably but still allows for comfortable conversation."@en ;
+    rdfs:comment "Moderate walking refers to brisk walking at a pace that increases heart rate and breathing noticeably but still allows for comfortable conversation."@en .
+
+obo:EXMO_0000200 a hlth:PhysicalActivity ;
+    rdfs:label "Gardening"@en ;
+    obo:IAO_0000115 "Cultivation of PLANTS; (FRUIT; VEGETABLES; MEDICINAL HERBS) on small plots of ground or in containers."@en ;
+    rdfs:comment "Cultivation of PLANTS; (FRUIT; VEGETABLES; MEDICINAL HERBS) on small plots of ground or in containers."@en .
+
+obo:FOODON_00001105 a hlth:FoodItem ;
+    rdfs:label "Eggs"@en ;
+    obo:IAO_0000115 "A food product made from an avian egg."@en ;
+    rdfs:comment "A food product made from an avian egg."@en .
+
+obo:FOODON_00002689 a hlth:Diet ;
+    rdfs:label "Tropical Fruit"@en ;
+    obo:IAO_0000115 "A tropical fruit food product is any fruit product derived from a tropical or subtropical fruit producing plant."@en ;
+    rdfs:comment "A tropical fruit food product is any fruit product derived from a tropical or subtropical fruit producing plant."@en .
+
+obo:FOODON_00003409 a hlth:FoodItem ;
+    rdfs:label "Cassava"@en ;
+    obo:IAO_0000115 "A tuberous root tuber of a cassava plant (Manihot esculenta)."@en ;
+    rdfs:comment "A tuberous root tuber of a cassava plant (Manihot esculenta)."@en .
+
+obo:FOODON_00004298 a hlth:FoodItem ;
+    rdfs:label "Poultry"@en ;
+    obo:IAO_0000115 "A whole poultry."@en ;
+    rdfs:comment "A whole poultry."@en .
+
+obo:FOODON_00004677 a hlth:FoodItem ;
+    rdfs:label "White Rice"@en ;
+    obo:IAO_0000115 "A cooked endosperm of a white rice plant."@en ;
+    rdfs:comment "A cooked endosperm of a white rice plant."@en .
+
+obo:FOODON_03310288 a hlth:FoodItem ;
+    rdfs:label "Ugali"@en ;
+    obo:IAO_0000115 "A type of maize flour porridge made in Africa."@en ;
+    rdfs:comment "A type of maize flour porridge made in Africa."@en .
+
+obo:FOODON_03420108 a hlth:FoodItem ;
+    rdfs:label "Sugar"@en ;
+    obo:IAO_0000115 "A broad term that includes the nutritive sweeteners dextrose, fructose, galactose, lactose, maltose and sucrose, which are simple carbohydrates with molecules composed of one or two saccharide units. Note that on a product label or in a recipe, 'sugar' means *SUCROSE* and should be so indexed. Use the broad term *SUGAR* only if the specific sugar used is not known or not listed in the vocabulary."@en ;
+    rdfs:comment "A broad term that includes the nutritive sweeteners dextrose, fructose, galactose, lactose, maltose and sucrose, which are simple carbohydrates with molecules composed of one or two saccharide units. Note that on a product label or in a recipe, 'sugar' means *SUCROSE* and should be so indexed. Use the broad term *SUGAR* only if the specific sugar used is not known or not listed in the vocabulary."@en .
+
+obo:NCIT_C172269 a hlth:PhysicalActivity ;
+    rdfs:label "Dancing"@en ;
+    obo:IAO_0000115 "A physical activity that consists of moving your feet and body rhythmically, usually in response to music."@en ;
+    rdfs:comment "A physical activity that consists of moving your feet and body rhythmically, usually in response to music."@en .
+
+obo:NCIT_C180667 a hlth:PhysicalActivity ;
+    rdfs:label "Hiking"@en ;
+    obo:IAO_0000115 "The activity of walking for recreation, exercise, or training that is usually strenuous and on unpaved surfaces."@en ;
+    rdfs:comment "The activity of walking for recreation, exercise, or training that is usually strenuous and on unpaved surfaces."@en .
+
+obo:NCIT_C85401 a hlth:PhysicalActivity ;
+    rdfs:label "Cycling"@en ;
+    obo:IAO_0000115 "Riding a bicycle for transportation or recreation."@en ;
+    rdfs:comment "Riding a bicycle for transportation or recreation."@en .
+
+obo:NCIT_C94738 a hlth:PhysicalActivity ;
+    rdfs:label "Swimming"@en ;
+    obo:IAO_0000115 "The act of propelling the body through water by movement of the arms and/or legs."@en ;
+    rdfs:comment "The act of propelling the body through water by movement of the arms and/or legs."@en .
+
+obo:SYMP_0000006 a hlth:Symptom ;
+    rdfs:label "Back Pain"@en ;
+    obo:IAO_0000115 "A pain that is characterized by occurring in the lower back."@en ;
+    rdfs:comment "A pain that is characterized by occurring in the lower back."@en .
+
+obo:SYMP_0000441 a hlth:Symptom ;
+    rdfs:label "Elbow Pain"@en ;
+    obo:IAO_0000115 "A joint pain that is characterized by a pain situated, or occurring, in or around the elbow."@en ;
+    rdfs:comment "A joint pain that is characterized by a pain situated, or occurring, in or around the elbow."@en .
+
+obo:SYMP_0000442 a hlth:Symptom ;
+    rdfs:label "Knee Pain"@en ;
+    obo:IAO_0000115 "A joint pain that is characterized by a pain situated, or occurring, in or around the knee."@en ;
+    rdfs:comment "A joint pain that is characterized by a pain situated, or occurring, in or around the knee."@en .
+
+obo:SYMP_0000458 a hlth:Symptom ;
+    rdfs:label "Nausea"@en ;
+    obo:IAO_0000115 "Nausea is a digestive system symptom characterized by an uneasy or unsettled feeling in the stomach together with an urge to vomit."@en ;
+    rdfs:comment "Nausea is a digestive system symptom characterized by an uneasy or unsettled feeling in the stomach together with an urge to vomit."@en .
+
+obo:SYMP_0000504 a hlth:Symptom ;
+    rdfs:label "Headache"@en,
+        "Severe Headaches"@en ;
+    obo:IAO_0000115 "A pain that is characterized by a pain in the head."@en ;
+    rdfs:comment "A pain that is characterized by a pain in the head."@en .
+
+obo:SYMP_0000565 a hlth:Symptom ;
+    rdfs:label "Frequent Urination"@en ;
+    obo:IAO_0000115 "A urinary system symptom that is characterized by the excessive secretion of urine."@en ;
+    rdfs:comment "A urinary system symptom that is characterized by the excessive secretion of urine."@en .
+
+obo:SYMP_0000610 a hlth:Symptom ;
+    rdfs:label "Dizziness"@en ;
+    obo:IAO_0000115 "A  balance symptom that is characterized by a sensation of unsteadiness accompanied by a feeling of movement within the head."@en ;
+    rdfs:comment "A  balance symptom that is characterized by a sensation of unsteadiness accompanied by a feeling of movement within the head."@en .
+
+obo:SYMP_0019177 a hlth:Symptom ;
+    rdfs:label "Feeling Tired"@en ;
+    obo:IAO_0000115 "A neurological and physiological symptom that is characterized by a weariness or exhaustion from labor, exertion, or stress."@en ;
+    rdfs:comment "A neurological and physiological symptom that is characterized by a weariness or exhaustion from labor, exertion, or stress."@en .
+
+local:breastfeeding a hlth:ManagementStrategy ;
+    rdfs:label "Breastfeeding"@en .
+
+local:chest_pain a hlth:Symptom ;
+    rdfs:label "Chest Pain"@en .
+
+local:dairy a hlth:FoodItem ;
+    rdfs:label "Dairy"@en .
+
+local:fibre a hlth:Nutrient ;
+    rdfs:label "Fibre"@en .
+
+local:healthy_diet a hlth:Diet ;
+    rdfs:label "Healthy Diet"@en .
+
+local:healthy_grains a hlth:FoodItem ;
+    rdfs:label "Healthy Grains"@en .
+
+local:joint_stiffness a hlth:Symptom ;
+    rdfs:label "Joint Stiffness"@en .
+
+local:pain a hlth:Symptom ;
+    rdfs:label "Pain"@en .
+
+local:physical_activity a hlth:PhysicalActivity ;
+    rdfs:label "Being More Active"@en,
+        "Physical Activity"@en .
+
+local:potatoes a hlth:FoodItem ;
+    rdfs:label "Potatoes"@en .
+
+local:processed_meat a hlth:FoodItem ;
+    rdfs:label "Processed Meat"@en .
+
+local:sodium a hlth:Nutrient ;
+    rdfs:label "Sodium"@en .
+
+local:sweets a hlth:FoodItem ;
+    rdfs:label "Sweets"@en .
+
+local:tomatoes a hlth:FoodItem ;
+    rdfs:label "Tomatoes"@en .
+
+obo:DOID_557 a hlth:Condition ;
+    rdfs:label "Kidney Disease"@en ;
+    obo:IAO_0000115 "A urinary system disease that is located_in the kidney."@en ;
+    rdfs:comment "A urinary system disease that is located_in the kidney."@en .
+
+obo:EXMO_0000184 a hlth:PhysicalActivity ;
+    rdfs:label "Brisk Walking"@en ;
+    obo:IAO_0000115 "Brisk walking is a type of exercise where a person walks quickly in order to increase the heart rate and get in shape."@en ;
+    rdfs:comment "Brisk walking is a type of exercise where a person walks quickly in order to increase the heart rate and get in shape."@en .
+
+obo:SYMP_0000012 a hlth:Symptom ;
+    rdfs:label "Blurred Vision"@en ;
+    obo:IAO_0000115 "A vision symptom that is characterized by a decreased clarity or sharpness in vision, which can be caused by eye conditions myopia or hyperopia."@en ;
+    rdfs:comment "A vision symptom that is characterized by a decreased clarity or sharpness in vision, which can be caused by eye conditions myopia or hyperopia."@en .
+
+obo:SYMP_0000538 a hlth:Symptom ;
+    rdfs:label "Edema"@en,
+        "Swelling"@en ;
+    obo:IAO_0000115 "A skin and integumentary tissue symptom that is characterized by an abnormal excess accumulation of serous fluid in connective tissue or in a serous cavity."@en ;
+    rdfs:comment "A skin and integumentary tissue symptom that is characterized by an abnormal excess accumulation of serous fluid in connective tissue or in a serous cavity."@en .
+
+local:dash_diet a hlth:Diet ;
+    rdfs:label "DASH Diet"@en ;
+    hlth:confidence "gold"^^xsd:string,
+        "silver"^^xsd:string ;
+    hlth:limits local:added_sugar,
+        local:saturated_fat,
+        local:sodium,
+        local:sugar_containing_beverage,
+        local:sugar_containing_beverages,
+        local:sweet,
+        local:sweets,
+        obo:FOODON_03400794 ;
+    hlth:recommends local:chicken,
+        local:fat_free_or_low_fat_dairy_products,
+        local:fruit,
+        local:fruits,
+        local:legumes,
+        local:low_fat_dairy_products,
+        local:seeds,
+        obo:FOODON_00001248,
+        obo:FOODON_00002753,
+        obo:FOODON_00003816,
+        obo:FOODON_00003950,
+        obo:FOODON_00004298,
+        obo:FOODON_03303171 ;
+    hlth:source_doc "DASH diet_ Healthy eating to lower your blood pressure - Mayo Clinic.pdf"^^xsd:string,
+        "WHO EMRO - Diet, nutrition and hypertension.pdf"^^xsd:string,
+        "health&nutrition_hypertension_infosheet.pdf"^^xsd:string ;
+    prov:wasDerivedFrom doc:DASH%20diet_%20Healthy%20eating%20to%20lower%20your%20blood%20pressure%20-%20Mayo%20Clinic,
+        doc:WHO%20EMRO%20-%20Diet%2C%20nutrition%20and%20hypertension,
+        doc:health%26nutrition_hypertension_infosheet .
+
+local:fruit a hlth:FoodItem ;
+    rdfs:label "Fruit"@en .
+
+local:legumes a hlth:FoodItem ;
+    rdfs:label "Legumes"@en .
+
+local:saturated_fat a hlth:FoodItem,
+        hlth:Nutrient ;
+    rdfs:label "Saturated Fat"@en .
+
+local:weight_management a hlth:ManagementStrategy ;
+    rdfs:label "Lose Extra Weight"@en,
+        "Weight Management"@en .
+
+obo:DOID_9352 a hlth:Condition ;
+    rdfs:label "Insulin Resistance"@en,
+        "Type 2 Diabetes"@en,
+        "Type 2 Diabetes Mellitus"@en ;
+    obo:IAO_0000115 "A diabetes mellitus that is characterized by high blood sugar, insulin resistance, and relative lack of insulin."@en ;
+    hlth:can_lead_to local:cardiovascular_disease,
+        local:damage_to_blood_vessels_in_eyes,
+        local:loss_of_vision,
+        obo:DOID_10763,
+        obo:DOID_114,
+        obo:DOID_557,
+        obo:DOID_9352 ;
+    hlth:confidence "gold"^^xsd:string,
+        "silver"^^xsd:string ;
+    hlth:has_description obo:DOID_9352 ;
+    hlth:has_symptom local:feeling_very_thirsty,
+        obo:SYMP_0000012,
+        obo:SYMP_0000565,
+        obo:SYMP_0019177 ;
+    hlth:managed_by local:ace_inhibitor,
+        local:angiotensin_receptor_blocker,
+        local:aspirin_therapy,
+        local:avoid_decrease_alcohol_intake,
+        local:breastfeeding,
+        local:dash_diet,
+        local:diet_education,
+        local:exercise,
+        local:exercise_30_60_min_moderate_intensity,
+        local:healthy_diet,
+        local:healthy_eating_habits,
+        local:low_fat_low_carbohydrates_diet,
+        local:management_strategy_limit_fats_and_oils,
+        local:management_strategy_limit_salt,
+        local:management_strategy_limit_sugars,
+        local:management_strategy_maintain_healthy_body_weight,
+        local:physical_activity,
+        local:physical_activity_20_minutes,
+        local:physical_activity_30min_5days,
+        local:quitting_smoking,
+        local:regular_meal_plan,
+        local:smoking_cessation,
+        local:statins,
+        local:weight_control,
+        local:weight_management,
+        local:whole_fruits,
+        obo:EXMO_0000184,
+        obo:FOODON_00001248,
+        obo:FOODON_00002689,
+        obo:FOODON_00002753,
+        obo:FOODON_00003816,
+        obo:FOODON_00003950,
+        obo:FOODON_03303171 ;
+    hlth:should_avoid local:biscuits,
+        local:cakes,
+        local:potatoes,
+        local:sugary_drinks,
+        local:sugary_foods,
+        local:sweets,
+        obo:FOODON_00003409,
+        obo:FOODON_00004677,
+        obo:FOODON_03310288,
+        obo:FOODON_03420108 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "WHO EMRO - Diet, nutrition and hypertension.pdf"^^xsd:string,
+        "d1_ncd_guide_moh.pdf"^^xsd:string,
+        "diabetes_regional_factsheet_iAHO.pdf"^^xsd:string,
+        "diabetes_who.pdf"^^xsd:string,
+        "health&nutrition_type2diabetes_infosheet.pdf"^^xsd:string,
+        "ncd_mgt_moh.pdf"^^xsd:string,
+        "paediatric_treatment_guide_moh.pdf"^^xsd:string ;
+    rdfs:comment "A diabetes mellitus that is characterized by high blood sugar, insulin resistance, and relative lack of insulin."@en ;
+    prov:wasDerivedFrom doc:WHO%20EMRO%20-%20Diet%2C%20nutrition%20and%20hypertension,
+        doc:d1_ncd_guide_moh,
+        doc:diabetes_regional_factsheet_iAHO,
+        doc:diabetes_who,
+        doc:health%26nutrition_type2diabetes_infosheet,
+        doc:ncd_mgt_moh,
+        doc:paediatric_treatment_guide_moh .
+
+obo:FOODON_00001248 a hlth:Diet,
+        hlth:FoodItem ;
+    rdfs:label "Fish"@en,
+        "Fish Food Product"@en ;
+    obo:IAO_0000115 "A fish food product includes products made from any fish species (aquatic vertebrate with gills and fins)."@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:contains_nutrient local:omega_3_fatty_acid ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string ;
+    rdfs:comment "A fish food product includes products made from any fish species (aquatic vertebrate with gills and fins)."@en ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC .
+
+obo:FOODON_00002753 a hlth:Diet,
+        hlth:FoodItem ;
+    rdfs:label "Bean"@en,
+        "Beans"@en ;
+    obo:IAO_0000115 "A seed of a bean plant from one of several genera of the flowering plant family (Fabaceae)."@en ;
+    rdfs:comment "A seed of a bean plant from one of several genera of the flowering plant family (Fabaceae)."@en .
+
+obo:FOODON_03303171 a hlth:Diet,
+        hlth:FoodItem ;
+    rdfs:label "Nut"@en,
+        "Nuts"@en,
+        "Nuts And Seeds"@en ;
+    obo:IAO_0000115 "A whole nut with or without its shell."@en ;
+    rdfs:comment "A whole nut with or without its shell."@en .
+
+obo:SYMP_0000064 a hlth:Symptom ;
+    rdfs:label "Joint Pain"@en,
+        "Stiffness"@en ;
+    obo:IAO_0000115 "A pain that is characterized by a pain situated, or occurring, in or around a joint."@en ;
+    rdfs:comment "A pain that is characterized by a pain situated, or occurring, in or around a joint."@en .
+
+local:fruits a hlth:FoodItem ;
+    rdfs:label "Fruits"@en .
+
+local:spinach a hlth:FoodItem ;
+    rdfs:label "Spinach"@en .
+
+obo:FOODON_00003950 a hlth:Diet,
+        hlth:FoodItem ;
+    rdfs:label "Whole Grain"@en,
+        "Whole Grains"@en ;
+    obo:IAO_0000115 "A seed from a cereal or pseudocereal plant which has a germ (embryo), endosperm, and bran (pericarp, seed coat, and aleurone) part."@en ;
+    rdfs:comment "A seed from a cereal or pseudocereal plant which has a germ (embryo), endosperm, and bran (pericarp, seed coat, and aleurone) part."@en .
+
+obo:FOODON_03400794 a hlth:FoodItem ;
+    rdfs:label "Red Meat"@en ;
+    obo:IAO_0000115 "The group includes carcass meat of domestic animals (e.g. beef, veal, pork, mutton / lamb, horse, rabbit) and game (e.g. wild pig, boar, venison, whale)."@en ;
+    rdfs:comment "The group includes carcass meat of domestic animals (e.g. beef, veal, pork, mutton / lamb, horse, rabbit) and game (e.g. wild pig, boar, venison, whale)."@en .
+
+obo:FOODON_00003816 a hlth:Diet,
+        hlth:FoodItem ;
+    rdfs:label "Vegetable"@en,
+        "Vegetables"@en ;
+    obo:IAO_0000115 "An anatomical part of a plant that is consumed by humans or other animals as food."@en ;
+    hlth:confidence "gold"^^xsd:string ;
+    hlth:is_a_type_of local:food_portion ;
+    hlth:sourceOntology "FOODON"^^xsd:string ;
+    hlth:source_doc "health&nutrition_type2diabetes_infosheet.pdf"^^xsd:string ;
+    rdfs:comment "An anatomical part of a plant that is consumed by humans or other animals as food."@en ;
+    prov:wasDerivedFrom doc:health%26nutrition_type2diabetes_infosheet .
+
+obo:DOID_114 a hlth:Condition ;
+    rdfs:label "Heart Disease"@en ;
+    obo:IAO_0000115 "A cardiovascular system disease that involves the heart."@en ;
+    hlth:confidence "silver"^^xsd:string ;
+    hlth:managed_by local:dash_diet ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "DASH diet_ Healthy eating to lower your blood pressure - Mayo Clinic.pdf"^^xsd:string ;
+    rdfs:comment "A cardiovascular system disease that involves the heart."@en ;
+    prov:wasDerivedFrom doc:DASH%20diet_%20Healthy%20eating%20to%20lower%20your%20blood%20pressure%20-%20Mayo%20Clinic .
+
+obo:DOID_8398 a hlth:Condition,
+        hlth:Description ;
+    rdfs:label "Degenerative Joint Disease"@en,
+        "Osteoarthritis"@en ;
+    obo:IAO_0000115 "An arthritis that has_material_basis_in worn out cartilage located_in joint."@en ;
+    hlth:can_lead_to obo:DOID_114,
+        obo:DOID_9352 ;
+    hlth:confidence "gold"^^xsd:string,
+        "silver"^^xsd:string ;
+    hlth:has_description local:inflammatory_pathways_modulation,
+        local:leptin,
+        local:resistin,
+        local:whole_joint_disease,
+        obo:DOID_8398 ;
+    hlth:has_symptom local:bent_back_when_standing,
+        local:joint_pain_in_back,
+        local:joint_pain_in_elbows,
+        local:joint_pain_in_knees,
+        local:osteoarthritic_symptoms,
+        local:pain,
+        local:reduced_mobility,
+        obo:SYMP_0000006,
+        obo:SYMP_0000064,
+        obo:SYMP_0000441,
+        obo:SYMP_0000442,
+        obo:SYMP_0000538 ;
+    hlth:managed_by local:anti_inflammatory_diet,
+        local:boswellia_serrata,
+        local:curcumin,
+        local:diet_high_in_phytochemicals,
+        local:energy_restricted_diet,
+        local:energy_restriction,
+        local:fisetin,
+        local:gentle_stretching_exercises,
+        local:green_tea,
+        local:high_fiber_intake,
+        local:low_dietary_inflammatory_index,
+        local:low_fat_diet,
+        local:lying_down_and_breathing_slowly_and_mindfully,
+        local:mediterranean_diet,
+        local:mediterranean_type_diet,
+        local:nutritional_interventions,
+        local:oligofructose,
+        local:omega_3_rich_diet,
+        local:plant_based_diet,
+        local:plant_forward_diet,
+        local:polyphenols,
+        local:pro_inflammatory_diet,
+        local:prudent_diet,
+        local:quercetin,
+        local:resveratrol,
+        local:slow_low_impact_exercise,
+        local:weight_loss,
+        local:weight_management,
+        local:whole_food_plant_based_diet,
+        local:whole_foods_plant_based_diet,
+        obo:EXMO_0000183 ;
+    hlth:should_avoid local:high_fat_diet,
+        local:meat,
+        local:oleate,
+        local:palmitate,
+        local:processed_meat,
+        local:refined_carbohydrates,
+        local:saturated_fat,
+        local:western_diet,
+        local:western_diet_high_in_omega_6,
+        obo:FOODON_03400794 ;
+    hlth:sourceOntology "DOID"^^xsd:string ;
+    hlth:source_doc "Nutritional Interventions in Osteoarthritis_ Mechanisms, Clinical Evidence, and Translational Opportunities - PMC.pdf"^^xsd:string,
+        "arthritis_article_cpdh.pdf"^^xsd:string,
+        "health&nutrition_osteoarthritis_infosheet.pdf"^^xsd:string,
+        "osteoarthritis-and-osteoporosis-fact-sheet-updated-address.pdf"^^xsd:string ;
+    rdfs:comment "An arthritis that has_material_basis_in worn out cartilage located_in joint."@en ;
+    prov:wasDerivedFrom doc:Nutritional%20Interventions%20in%20Osteoarthritis_%20Mechanisms%2C%20Clinical%20Evidence%2C%20and%20Translational%20Opportunities%20-%20PMC,
+        doc:arthritis_article_cpdh,
+        doc:health%26nutrition_osteoarthritis_infosheet,
+        doc:osteoarthritis-and-osteoporosis-fact-sheet-updated-address .
+
