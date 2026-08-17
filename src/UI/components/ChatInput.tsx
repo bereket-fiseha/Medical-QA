@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, KeyboardEvent } from "react";
-import { Send } from "lucide-react";
+import { Send, Zap } from "lucide-react";
 import clsx from "clsx";
 import { LANGUAGES } from "@/lib/constants";
 import type { LanguageCode } from "@/lib/types";
@@ -22,10 +22,17 @@ export default function ChatInput({
   currentLang,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const lang = LANGUAGES.find((l) => l.code === currentLang)!;
+
+  const isAuto    = currentLang === "auto";
+  const lang      = LANGUAGES.find((l) => l.code === currentLang);
+  const badge     = isAuto ? "AUTO" : (lang?.badge ?? "EN");
+  const placeholder = isAuto
+    ? "Type in any language — it will be detected automatically…"
+    : (lang?.placeholder ?? "Ask a medical question…");
+
   const canSend = value.trim().length > 0 && !disabled;
 
-  // Auto-resize
+  // Auto-resize textarea
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
@@ -42,7 +49,6 @@ export default function ChatInput({
 
   return (
     <footer className="bg-white border-t border-slate-200 px-4 py-3.5 flex-shrink-0">
-      {/* Input row */}
       <div
         className={clsx(
           "flex items-end gap-2.5 max-w-3xl mx-auto",
@@ -51,9 +57,17 @@ export default function ChatInput({
           "border-slate-200"
         )}
       >
-        {/* Language badge */}
-        <span className="self-end mb-1 text-[11px] font-bold text-primary-600 bg-primary-50 border border-primary-100 rounded-md px-1.5 py-0.5 tracking-wide flex-shrink-0">
-          {lang.badge}
+        {/* Language / Auto badge */}
+        <span
+          className={clsx(
+            "self-end mb-1 text-[11px] font-bold rounded-md px-1.5 py-0.5 tracking-wide flex-shrink-0 flex items-center gap-1",
+            isAuto
+              ? "text-emerald-600 bg-emerald-50 border border-emerald-200"
+              : "text-primary-600 bg-primary-50 border border-primary-100"
+          )}
+        >
+          {isAuto && <Zap size={10} strokeWidth={2.5} />}
+          {badge}
         </span>
 
         {/* Textarea */}
@@ -62,7 +76,7 @@ export default function ChatInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={lang.placeholder}
+          placeholder={placeholder}
           maxLength={2000}
           rows={1}
           disabled={disabled}
@@ -70,7 +84,7 @@ export default function ChatInput({
           className="flex-1 bg-transparent resize-none border-none outline-none text-[14.5px] text-slate-900 placeholder:text-slate-400 leading-relaxed max-h-36 min-h-6 overflow-y-auto scrollbar-thin disabled:opacity-60"
         />
 
-        {/* Right side actions */}
+        {/* Actions */}
         <div className="flex items-center gap-2 self-end flex-shrink-0">
           <span className="text-[11px] text-slate-400 tabular-nums hidden sm:block">
             {value.length}/2000
@@ -91,7 +105,6 @@ export default function ChatInput({
         </div>
       </div>
 
-      {/* Hint */}
       <p className="text-[11.5px] text-slate-400 text-center mt-2 max-w-3xl mx-auto">
         MediAssist covers NCDs and diet — always consult a qualified healthcare professional for personal medical advice.
       </p>

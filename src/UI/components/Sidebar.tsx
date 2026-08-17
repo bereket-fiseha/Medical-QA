@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, Plus, X } from "lucide-react";
+import { Activity, Plus, X, Zap } from "lucide-react";
 import clsx from "clsx";
 import type { Language, LanguageCode } from "@/lib/types";
 import { LANGUAGES } from "@/lib/constants";
@@ -8,7 +8,9 @@ import { LANGUAGES } from "@/lib/constants";
 interface SidebarProps {
   open: boolean;
   currentLang: LanguageCode;
+  autoDetect: boolean;
   onLangChange: (lang: LanguageCode) => void;
+  onAutoDetectChange: (enabled: boolean) => void;
   onNewChat: () => void;
   onClose: () => void;
 }
@@ -16,7 +18,9 @@ interface SidebarProps {
 export default function Sidebar({
   open,
   currentLang,
+  autoDetect,
   onLangChange,
+  onAutoDetectChange,
   onNewChat,
   onClose,
 }: SidebarProps) {
@@ -69,15 +73,56 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Language */}
+        {/* ── Language section ── */}
         <p className="px-5 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600 flex-shrink-0">
           Language
         </p>
-        <div className="px-3 flex flex-col gap-1 flex-shrink-0">
+
+        {/* Auto-detect toggle */}
+        <div className="px-3 mb-2 flex-shrink-0">
+          <button
+            onClick={() => onAutoDetectChange(!autoDetect)}
+            className={clsx(
+              "w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-[13px] font-medium transition-all",
+              autoDetect
+                ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-400"
+                : "border-white/10 text-slate-400 hover:bg-white/7 hover:text-white"
+            )}
+            aria-pressed={autoDetect}
+          >
+            <span className="flex items-center gap-2">
+              <Zap size={13} strokeWidth={2.2} className={autoDetect ? "text-emerald-400" : "text-slate-500"} />
+              Auto-detect language
+            </span>
+            {/* Toggle pill */}
+            <span
+              className={clsx(
+                "relative inline-flex h-5 w-9 rounded-full transition-colors duration-200 flex-shrink-0",
+                autoDetect ? "bg-emerald-500" : "bg-slate-600"
+              )}
+            >
+              <span
+                className={clsx(
+                  "absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200",
+                  autoDetect ? "translate-x-4" : "translate-x-0"
+                )}
+              />
+            </span>
+          </button>
+        </div>
+
+        {/* Manual language buttons — dimmed when auto-detect is on */}
+        <div
+          className={clsx(
+            "px-3 flex flex-col gap-1 flex-shrink-0 transition-opacity duration-200",
+            autoDetect && "opacity-40 pointer-events-none"
+          )}
+        >
           {LANGUAGES.map((lang: Language) => (
             <button
               key={lang.code}
               onClick={() => onLangChange(lang.code)}
+              tabIndex={autoDetect ? -1 : 0}
               className={clsx(
                 "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all text-left border",
                 currentLang === lang.code

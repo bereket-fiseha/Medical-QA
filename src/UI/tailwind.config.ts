@@ -45,6 +45,15 @@ const config: Config = {
           "0%,100%": { opacity: "1" },
           "50%":     { opacity: "0.4" },
         },
+        progressPulse: {
+          "0%":   { transform: "translateX(-100%)" },
+          "50%":  { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        progressSlide: {
+          "0%":   { marginLeft: "-70%", width: "70%" },
+          "100%": { marginLeft: "100%", width: "70%" },
+        },
       },
       animation: {
         "fade-in":  "fade-in 0.3s ease both",

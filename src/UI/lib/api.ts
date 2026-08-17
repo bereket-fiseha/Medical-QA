@@ -1,12 +1,6 @@
 import type { ChatApiRequest, ChatApiResponse } from "./types";
 
-/**
- * Sends a chat message through the Next.js rewrite proxy → FastAPI backend.
- * The /api/* prefix is rewritten to FASTAPI_URL in next.config.ts.
- */
-export async function sendChatMessage(
-  req: ChatApiRequest
-): Promise<ChatApiResponse> {
+export async function sendChatMessage(req: ChatApiRequest): Promise<ChatApiResponse> {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -15,23 +9,25 @@ export async function sendChatMessage(
 
   if (!res.ok) {
     let detail = "The server returned an error.";
-    try {
-      const err = await res.json();
-      detail = err.detail ?? detail;
-    } catch {
-      // ignore parse error
-    }
+    try { const err = await res.json(); detail = err.detail ?? detail; } catch { /* ignore */ }
     throw new Error(detail);
   }
 
   return res.json() as Promise<ChatApiResponse>;
 }
 
-export async function checkHealth(): Promise<boolean> {
+export type WarmupStatus = "idle" | "warming" | "ready" | "timeout" | "error" | "degraded";
+export interface WarmupResult { status: WarmupStatus; elapsed_ms?: number; detail?: string; }
+
+export async function warmupTranslationServer(): Promise<WarmupResult> {
   try {
-    const res = await fetch("/api/health", { method: "GET" });
-    return res.ok;
+    const res = await fetch("/api/warmup", { method: "GET" });
+    return await res.json() as WarmupResult;
   } catch {
-    return false;
+    return { status: "error", detail: "Could not reach the MediAssist API." };
   }
+}
+
+export async function checkHealth(): Promise<boolean> {
+  try { return (await fetch("/api/health")).ok; } catch { return false; }
 }

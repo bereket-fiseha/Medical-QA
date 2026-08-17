@@ -8,161 +8,186 @@ import WelcomeScreen from "./WelcomeScreen";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import ChatInput from "./ChatInput";
-import TranslationToast from "./TranslationToast";
+import PipelineStatusBar, { type PipelineStage } from "./TranslationToast";
 import { sendChatMessage } from "@/lib/api";
 import { LANGUAGES } from "@/lib/constants";
 import type { Message, LanguageCode } from "@/lib/types";
 
-type Status = "ready" | "loading" | "translating" | "error";
+type Status = "ready" | "loading" | "error";
+
+// Stages shown when language is NOT English (full pipeline)
+const STAGES_FULL: { stage: PipelineStage; label: string }[] = [
+  { stage: "detecting",       label: "Identifying language" },
+  { stage: "translating_in",  label: "Translating"          },
+  { stage: "thinking",        label: "Querying knowledge base" },
+];
+
+// Stages for English (no translation needed)
+const STAGES_EN: { stage: PipelineStage; label: string }[] = [
+  { stage: "thinking", label: "Querying knowledge base" },
+];
 
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentLang, setCurrentLang] = useState<LanguageCode>("en");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<Status>("ready");
-  const [isTyping, setIsTyping] = useState(false);
-  const [toast, setToast] = useState({ visible: false, message: "" });
+  const [autoDetect, setAutoDetect]   = useState(false);
+  const [messages, setMessages]       = useState<Message[]>([]);
+  const [inputValue, setInputValue]   = useState("");
+  const [status, setStatus]           = useState<Status>("ready");
+  const [isTyping, setIsTyping]       = useState(false);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [pipelineStage, setPipelineStage] = useState<PipelineStage>("idle");
+  const [pipelineLabel, setPipelineLabel] = useState("");
+  const [lastDetected, setLastDetected]   = useState<{ label: string; confidence: number } | null>(null);
 
-  const hasMessages = messages.length > 0;
+  const messagesEndRef  = useRef<HTMLDivElement>(null);
+  const stageTimerRef   = useRef<ReturnType<typeof setInterval> | null>(null);
+  const clearTimerRef   = useRef<ReturnType<typeof setTimeout>  | null>(null);
 
-  // Scroll to bottom whenever messages or typing state changes
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  function showToast(msg: string) {
-    setToast({ visible: true, message: msg });
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(
-      () => setToast((t) => ({ ...t, visible: false })),
-      3000
-    );
+  /** Advance through stages on a timer while request is in-flight */
+  function startStageSimulation(isEnglish: boolean) {
+    const stages = isEnglish ? STAGES_EN : STAGES_FULL;
+    let idx = 0;
+
+    // Set first stage immediately
+    setPipelineStage(stages[0].stage);
+    setPipelineLabel(stages[0].label);
+
+    if (stages.length === 1) return; // nothing more to cycle
+
+    stageTimerRef.current = setInterval(() => {
+      idx = Math.min(idx + 1, stages.length - 1);
+      setPipelineStage(stages[idx].stage);
+      setPipelineLabel(stages[idx].label);
+      if (idx === stages.length - 1) {
+        // Reached the last stage — stop cycling, stay there until response
+        if (stageTimerRef.current) clearInterval(stageTimerRef.current);
+      }
+    }, 2000); // advance every 2 s
+  }
+
+  function stopStageSimulation(finalLabel: string) {
+    if (stageTimerRef.current) { clearInterval(stageTimerRef.current); stageTimerRef.current = null; }
+    setPipelineStage("done");
+    setPipelineLabel(finalLabel);
+    if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+    clearTimerRef.current = setTimeout(() => setPipelineStage("idle"), 2000);
+  }
+
+  function failStageSimulation() {
+    if (stageTimerRef.current) { clearInterval(stageTimerRef.current); stageTimerRef.current = null; }
+    setPipelineStage("error");
+    setPipelineLabel("Something went wrong");
+    if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+    clearTimerRef.current = setTimeout(() => setPipelineStage("idle"), 3000);
+  }
+
+  function patchMessage(id: string, patch: Partial<Message>) {
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)));
   }
 
   const handleSend = useCallback(async (overrideText?: string) => {
     const text = (overrideText ?? inputValue).trim();
     if (!text || status !== "ready") return;
 
-    const langMeta = LANGUAGES.find((l) => l.code === currentLang)!;
+    const effectiveLang: LanguageCode = autoDetect ? "auto" : currentLang;
+    const langMeta = LANGUAGES.find((l) => l.code === currentLang);
+    const isEnglish = !autoDetect && currentLang === "en";
 
-    // Add user message
-    const userMsg: Message = {
-      id: nanoid(),
-      role: "user",
-      text,
-      timestamp: new Date(),
-      translatedFrom: currentLang !== "en" ? langMeta.label : undefined,
-    };
-    setMessages((prev) => [...prev, userMsg]);
+    const userMsgId = nanoid();
+    setMessages((prev) => [...prev, {
+      id: userMsgId, role: "user", text, timestamp: new Date(),
+      translatedFrom: (!autoDetect && currentLang !== "en") ? langMeta?.label : undefined,
+    }]);
     setInputValue("");
-
-    // Update status
-    if (currentLang !== "en") {
-      setStatus("translating");
-      showToast(`Translating from ${langMeta.label} to English…`);
-    } else {
-      setStatus("loading");
-    }
     setIsTyping(true);
+    setStatus("loading");
+    startStageSimulation(isEnglish);
 
     try {
-      const data = await sendChatMessage({ message: text, language: currentLang });
+      const data = await sendChatMessage({ message: text, language: effectiveLang });
 
-      if (currentLang !== "en") {
-        showToast(`Response translated back to ${langMeta.label}`);
+      const resolvedMeta  = LANGUAGES.find((l) => l.code === data.language);
+      const resolvedLabel = resolvedMeta?.label ?? data.language.toUpperCase();
+      const confidence    = data.detection_confidence ?? 0;
+
+      if (autoDetect && data.detected_language) {
+        patchMessage(userMsgId, { detectedLang: resolvedLabel, detectedConfidence: confidence });
+        setLastDetected({ label: resolvedLabel, confidence });
       }
 
-      const assistantMsg: Message = {
-        id: nanoid(),
-        role: "assistant",
-        text: data.response,
-        timestamp: new Date(),
-        source: data.source,
-        kgUsed: data.kg_used,
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
+      stopStageSimulation(`Responded in ${resolvedLabel}`);
+
+      setMessages((prev) => [...prev, {
+        id: nanoid(), role: "assistant", text: data.response,
+        timestamp: new Date(), source: data.source, kgUsed: data.kg_used,
+      }]);
       setStatus("ready");
     } catch (err) {
-      const errorText =
-        err instanceof Error && err.message.includes("fetch")
-          ? "Unable to connect to the MediAssist server. Make sure the API is running on localhost:8000."
-          : err instanceof Error
-          ? err.message
-          : "An unexpected error occurred. Please try again.";
-
-      const errMsg: Message = {
-        id: nanoid(),
-        role: "error",
-        text: errorText,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errMsg]);
+      failStageSimulation();
+      const errorText = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setMessages((prev) => [...prev,
+        { id: nanoid(), role: "error", text: errorText, timestamp: new Date() }
+      ]);
       setStatus("error");
       setTimeout(() => setStatus("ready"), 3000);
     } finally {
       setIsTyping(false);
     }
-  }, [inputValue, currentLang, status]);
+  }, [inputValue, currentLang, autoDetect, status]);
 
   function handleNewChat() {
-    setMessages([]);
-    setInputValue("");
-    setIsTyping(false);
-    setStatus("ready");
+    setMessages([]); setInputValue(""); setIsTyping(false);
+    setStatus("ready"); setLastDetected(null); setPipelineStage("idle");
+    if (stageTimerRef.current) clearInterval(stageTimerRef.current);
+  }
+
+  function handleAutoDetectChange(enabled: boolean) {
+    setAutoDetect(enabled);
+    if (!enabled) setLastDetected(null);
   }
 
   return (
     <div className="flex h-full overflow-hidden">
-      {/* Sidebar */}
       <Sidebar
-        open={sidebarOpen}
-        currentLang={currentLang}
-        onLangChange={setCurrentLang}
-        onNewChat={handleNewChat}
-        onClose={() => setSidebarOpen(false)}
+        open={sidebarOpen} currentLang={currentLang} autoDetect={autoDetect}
+        onLangChange={setCurrentLang} onAutoDetectChange={handleAutoDetectChange}
+        onNewChat={handleNewChat} onClose={() => setSidebarOpen(false)}
       />
 
-      {/* Main */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Topbar
-          currentLang={currentLang}
-          status={status}
+          currentLang={autoDetect ? "auto" : currentLang}
+          lastDetected={autoDetect ? lastDetected : null}
+          status={status === "loading" ? "loading" : status === "error" ? "error" : "ready"}
           onMenuClick={() => setSidebarOpen((o) => !o)}
         />
 
-        {/* Chat area */}
         <main className="flex-1 overflow-y-auto px-4 py-6 scroll-smooth">
           <div className="max-w-3xl mx-auto w-full">
-            {!hasMessages ? (
-              <WelcomeScreen onSuggestion={(prompt) => handleSend(prompt)} />
-            ) : (
-              <div className="flex flex-col gap-5">
-                {messages.map((msg) => (
-                  <MessageBubble key={msg.id} message={msg} />
-                ))}
-                {isTyping && <TypingIndicator />}
-                <div ref={messagesEndRef} />
-              </div>
-            )}
+            {messages.length === 0
+              ? <WelcomeScreen onSuggestion={(p) => handleSend(p)} />
+              : <div className="flex flex-col gap-5">
+                  {messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)}
+                  {isTyping && <TypingIndicator />}
+                  <div ref={messagesEndRef} />
+                </div>
+            }
           </div>
         </main>
 
-        {/* Input */}
         <ChatInput
-          value={inputValue}
-          onChange={setInputValue}
-          onSend={() => handleSend()}
-          disabled={status !== "ready"}
-          currentLang={currentLang}
+          value={inputValue} onChange={setInputValue}
+          onSend={() => handleSend()} disabled={status !== "ready"}
+          currentLang={autoDetect ? "auto" : currentLang}
         />
       </div>
 
-      {/* Translation toast */}
-      <TranslationToast visible={toast.visible} message={toast.message} />
+      <PipelineStatusBar stage={pipelineStage} label={pipelineLabel} />
     </div>
   );
 }

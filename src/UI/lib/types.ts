@@ -1,4 +1,4 @@
-export type LanguageCode = "en" | "rw" | "dav";
+export type LanguageCode = "en" | "rw" | "dav" | "auto";
 
 export interface Language {
   code: LanguageCode;
@@ -14,6 +14,8 @@ export interface Message {
   text: string;
   timestamp: Date;
   translatedFrom?: string;
+  detectedLang?: string;        // set on USER message when auto-detect resolves
+  detectedConfidence?: number;  // 0–1 confidence score
   source?: string;
   kgUsed?: boolean;
 }
@@ -27,7 +29,9 @@ export interface ChatApiResponse {
   response: string;
   original_message: string;
   translated_input?: string;
-  language: LanguageCode;
+  language: string;
+  detected_language?: string;
+  detection_confidence?: number;
   kg_used: boolean;
   source: string;
 }
